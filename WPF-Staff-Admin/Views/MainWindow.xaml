@@ -1,0 +1,223 @@
+﻿<Window x:Class="WPF_Staff_Admin.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WPF_Staff_Admin.Views"
+       mc:Ignorable="d"
+        Title="Library Management System"
+        Height="700" Width="1200"
+        WindowStartupLocation="CenterScreen"
+        WindowState="Maximized">
+    <Grid>
+        <Grid.RowDefinitions>
+          
+            <RowDefinition Height="60"/>
+          
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0" 
+                Background="#2196F3"
+                BorderBrush="#1976D2"
+                BorderThickness="0,0,0,2">
+            <Grid Margin="20,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" 
+                           Orientation="Horizontal"
+                           VerticalAlignment="Center">
+
+                    <Viewbox Width="35" Height="35" Margin="0,0,15,0">
+                        <Canvas Width="24" Height="24">
+                            <Path Fill="White" Data="M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,6A2,2 0 0,0 10,8A2,2 0 0,0 12,10A2,2 0 0,0 14,8A2,2 0 0,0 12,6M17,12C17.67,12 18.27,12.24 18.74,12.65C19.97,13.5 20.85,14.82 21,16.32V18H15V16H19C18.86,14.5 17.77,13 16,13C14.92,13 14.07,13.54 13.5,14.5L12,13.5C12.83,12.18 14.27,11 16,11C16.31,11 16.62,11.05 16.92,11.13C17.57,11.31 18.17,11.63 18.66,12.08C17.44,11.39 16.27,11 15,11V13C15.7,13 16.37,13.13 17,13.35V12M6.5,13.5C5.67,13.5 5,14.17 5,15C5,15.83 5.67,16.5 6.5,16.5C7.33,16.5 8,15.83 8,15C8,14.17 7.33,13.5 6.5,13.5M6.5,18.5C4.57,18.5 3,16.93 3,15C3,13.07 4.57,11.5 6.5,11.5C8.43,11.5 10,13.07 10,15C10,16.93 8.43,18.5 6.5,18.5M9,20V22H15V20H9Z"/>
+                        </Canvas>
+                    </Viewbox>
+
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock Text="LIBRARY MANAGEMENT SYSTEM"
+                                  FontSize="18"
+                                  FontWeight="Bold"
+                                  Foreground="White"/>
+                        <TextBlock Text="{Binding CurrentViewTitle}"
+                                  FontSize="12"
+                                  Foreground="#E3F2FD"
+                                  Margin="0,2,0,0"/>
+                    </StackPanel>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1"
+                           Orientation="Horizontal"
+                           VerticalAlignment="Center">
+
+                    <StackPanel Margin="0,0,20,0"
+                               VerticalAlignment="Center">
+                        <TextBlock Text="{Binding UserFullName}"
+                                  FontSize="14"
+                                  FontWeight="SemiBold"
+                                  Foreground="White"
+                                  HorizontalAlignment="Right"/>
+                        <TextBlock Text="{Binding UserRole}"
+                                  FontSize="11"
+                                  Foreground="#E3F2FD"
+                                  HorizontalAlignment="Right"/>
+                    </StackPanel>
+
+                    <Button Command="{Binding LogoutCommand}"
+                           Background="#1976D2"
+                           BorderThickness="0"
+                           Padding="15,8"
+                           ToolTip="Đăng xuất">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Background="{TemplateBinding Background}"
+                                                   CornerRadius="5"
+                                                   Padding="{TemplateBinding Padding}">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <Viewbox Width="16" Height="16" Margin="0,0,8,0">
+                                                        <Canvas Width="24" Height="24">
+                                                            <Path Fill="White" Data="M16,17V14H9V10H16V7L21,12L16,17M14,2A2,2 0 0,1 16,4V6H14V4H5V20H14V18H16V20A2,2 0 0,1 14,22H5A2,2 0 0,1 3,20V4A2,2 0 0,1 5,2H14Z"/>
+                                                        </Canvas>
+                                                    </Viewbox>
+                                                    <TextBlock Text="Đăng xuất"
+                                                             Foreground="White"
+                                                             FontSize="13"
+                                                             VerticalAlignment="Center"/>
+                                                </StackPanel>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#1565C0"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+       
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+    
+                <ColumnDefinition Width="250"/>
+ 
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Border Grid.Column="0"
+                   Background="#263238"
+                   BorderBrush="#1C2326"
+                   BorderThickness="0,0,1,0">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel Margin="0,10">
+                 
+                        <Button Command="{Binding NavigateToDashboardCommand}"
+                               Style="{StaticResource MenuButtonStyle}"
+                               Tag="📊">
+                            <TextBlock Text="Dashboard"/>
+                        </Button>
+
+                      
+                        <Border Height="1" Background="#37474F" Margin="10,10"/>
+
+                   
+                        <TextBlock Text="QUẢN LÝ THƯ VIỆN"
+                                  FontSize="11"
+                                  FontWeight="SemiBold"
+                                  Foreground="#78909C"
+                                  Margin="20,10,10,5"/>
+
+                        <Button Command="{Binding NavigateToBooksCommand}"
+                               Style="{StaticResource MenuButtonStyle}"
+                               Tag="📚">
+                            <TextBlock Text="Quản lý Sách"/>
+                        </Button>
+
+                        <Button Command="{Binding NavigateToBorrowingsCommand}"
+                               Style="{StaticResource MenuButtonStyle}"
+                               Tag="📖">
+                            <TextBlock Text="Mượn / Trả sách"/>
+                        </Button>
+
+                        <Button Command="{Binding NavigateToFinesCommand}"
+                               Style="{StaticResource MenuButtonStyle}"
+                               Tag="💰">
+                            <TextBlock Text="Quản lý Phạt"/>
+                        </Button>
+
+                    
+                        <Border Height="1" Background="#37474F" Margin="10,10"/>
+
+                     
+                        <TextBlock Text="DỮ LIỆU MASTER"
+                                  FontSize="11"
+                                  FontWeight="SemiBold"
+                                  Foreground="#78909C"
+                                  Margin="20,10,10,5"/>
+
+                        <Button Command="{Binding NavigateToAuthorsCommand}"
+                               Style="{StaticResource MenuButtonStyle}"
+                               Tag="✍️">
+                            <TextBlock Text="Tác giả"/>
+                        </Button>
+
+                        <Button Command="{Binding NavigateToCategoriesCommand}"
+                               Style="{StaticResource MenuButtonStyle}"
+                               Tag="📋">
+                            <TextBlock Text="Thể loại"/>
+                        </Button>
+
+                        <Button Command="{Binding NavigateToPublishersCommand}"
+                               Style="{StaticResource MenuButtonStyle}"
+                               Tag="🏢">
+                            <TextBlock Text="Nhà xuất bản"/>
+                        </Button>
+
+                    
+                        <Border Height="1" Background="#37474F" Margin="10,10"
+                               Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVisibilityConverter}}"/>
+
+                      
+                        <TextBlock Text="ADMIN"
+                                  FontSize="11"
+                                  FontWeight="SemiBold"
+                                  Foreground="#78909C"
+                                  Margin="20,10,10,5"
+                                  Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVisibilityConverter}}"/>
+
+                        <Button Command="{Binding NavigateToUsersCommand}"
+                               Style="{StaticResource MenuButtonStyle}"
+                               Tag="👥"
+                               Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVisibilityConverter}}">
+                            <TextBlock Text="Quản lý Người dùng"/>
+                        </Button>
+
+                        <Button Command="{Binding NavigateToReportsCommand}"
+                               Style="{StaticResource MenuButtonStyle}"
+                               Tag="📊"
+                               Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVisibilityConverter}}">
+                            <TextBlock Text="Báo cáo,Thống kê"/>
+                        </Button>
+                    </StackPanel>
+                </ScrollViewer>
+            </Border>
+
+            <Border Grid.Column="1"
+                   Background="#FAFAFA">
+                <ContentControl Content="{Binding CurrentView}"
+                              Margin="20"/>
+            </Border>
+        </Grid>
+    </Grid>
+</Window>

@@ -1,0 +1,194 @@
+﻿@model LibraryWeb.Models.BorrowingTicketViewModel
+@{
+    ViewData["Title"] = $"Chi tiết phiếu #{Model.TicketId}";
+    var hasOverdue = Model.DueDate < DateTime.Now && Model.Details.Any(d => d.Status == "Đang mượn");
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow">
+                <div class="card-header @(hasOverdue ? "bg-danger" : "bg-primary") text-white">
+                    <h4 class="mb-0">
+                        <i class="bi bi-receipt"></i> Phiếu #@Model.TicketId
+                        @if (hasOverdue)
+                        {
+                            <span class="badge bg-warning text-dark ms-2">QUÁ HẠN</span>
+                        }
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <!-- Thông tin -->
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <h6 class="text-muted mb-3"><i class="bi bi-person"></i> Người mượn</h6>
+                            <table class="table table-sm table-borderless">
+                                <tr>
+                                    <td class="fw-bold">Họ tên:</td>
+                                    <td>@Model.MemberName</td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold">Email:</td>
+                                    <td>@Model.MemberEmail</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="text-muted mb-3"><i class="bi bi-calendar"></i> Thời gian</h6>
+                            <table class="table table-sm table-borderless">
+                                <tr>
+                                    <td class="fw-bold">Ngày mượn:</td>
+                                    <td>@Model.BorrowDate.ToString("dd/MM/yyyy HH:mm")</td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold">Hạn trả:</td>
+                                    <td class="@(hasOverdue ? "text-danger fw-bold" : "text-success")">
+                                        @Model.DueDate.ToString("dd/MM/yyyy")
+                                        @if (hasOverdue)
+                                        {
+                                            var days = (DateTime.Now - Model.DueDate).Days;
+                                            <span class="badge bg-danger ms-2">Quá @days ngày</span>
+                                        }
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                    @if (!string.IsNullOrEmpty(Model.Notes))
+                    {
+                        <div class="alert alert-secondary mb-4">
+                            <i class="bi bi-chat-left-text"></i> <strong>Ghi chú:</strong> @Model.Notes
+                        </div>
+                    }
+
+                    <h6 class="text-muted mb-3">
+                        <i class="bi bi-journals"></i> Danh sách sách (@Model.Details.Count)
+                    </h6>
+
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Sách</th>
+                                    <th>ISBN</th>
+                                    <th>Trạng thái</th>
+                                    <th>Ngày trả</th>
+                                    <th>Phạt</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (int i = 0; i < Model.Details.Count; i++)
+                                {
+                                    var detail = Model.Details[i];
+                                    <tr>
+                                        <td>@(i + 1)</td>
+                                        <td>
+                                            <strong>@detail.BookTitle</strong>
+                                            @if (!string.IsNullOrEmpty(detail.Authors))
+                                            {
+                                                <br />
+                                        
+                                                <small class="text-muted">@detail.Authors</small>
+                                            }
+                                            @if (detail.BookPrice.HasValue)
+                                            {
+                                                <br />
+                                        
+                                                <small class="text-muted">@detail.BookPrice.Value.ToString("N0")đ</small>
+                                            }
+                                        </td>
+                                        <td><code>@detail.BookIsbn</code></td>
+                                        <td>
+                                            @if (detail.Status == "Đang mượn")
+                                            {
+                                                <span class="badge bg-warning text-dark">Đang mượn</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-success">Đã trả</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            @if (detail.ReturnDate.HasValue)
+                                            {
+                                                @detail.ReturnDate.Value.ToString("dd/MM/yyyy")
+                                            }
+                                            else
+                                            {
+                                                <span class="text-muted">-</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            @if (detail.DaysOverdue > 0)
+                                            {
+                                                var fineAmount = detail.DaysOverdue * 5000;
+                                                <span class="text-danger fw-bold">= @fineAmount.ToString("N0") đ</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-success">Không</span>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                    @* @{
+                        var totalFine = Model.Details.Where(d => d.HasFine).Sum(d => d.FineAmount ?? 0);
+                        if (totalFine > 0)
+                        {
+                            <div class="alert alert-danger">
+                                <i class="bi bi-exclamation-triangle"></i>
+                                <strong>Tổng phạt:</strong> <span class="fs-5">@totalFine.ToString("N0")đ</span>
+                            </div>
+                        }
+                    } *@
+
+                    <div class="d-flex gap-2 mt-4">
+                        <button type="button" class="btn btn-secondary" onclick="history.back()">
+                            <i class="bi bi-arrow-left"></i> Quay lại
+                        </button>
+
+                        @if (Model.Details.Any(d => d.Status == "Đang mượn"))
+                        {
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#returnModal">
+                                <i class="bi bi-arrow-return-left"></i> Trả sách
+                            </button>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="returnModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Trả sách</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Chọn sách muốn trả:</p>
+                @foreach (var detail in Model.Details.Where(d => d.Status == "Đang mượn"))
+                {
+                    <form asp-action="Return" method="post" class="mb-2">
+                        <input type="hidden" name="bookId" value="@detail.BookId" />
+                        <div class="d-flex justify-content-between align-items-center border-bottom pb-2">
+                            <span>@detail.BookTitle</span>
+                            <button type="submit" class="btn btn-sm btn-success">
+                                <i class="bi bi-check"></i> Trả
+                            </button>
+                        </div>
+                    </form>
+                }
+            </div>
+        </div>
+    </div>
+</div>

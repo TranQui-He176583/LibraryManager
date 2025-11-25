@@ -1,0 +1,638 @@
+﻿<UserControl x:Class="WPF_Staff_Admin.Views.Borrowing.BorrowingListView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WPF_Staff_Admin.Views.Borrowing"
+             mc:Ignorable="d"
+             d:DesignHeight="800" d:DesignWidth="1200"
+             Background="#F5F5F5">
+
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+
+        <Style x:Key="CenterTextStyle" TargetType="TextBlock">
+            <Setter Property="TextAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="5"/>
+        </Style>
+
+        <Style x:Key="RightTextStyle" TargetType="TextBlock">
+            <Setter Property="TextAlignment" Value="Right"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+        </Style>
+
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- HEADER -->
+        <Border Grid.Row="0"
+                Background="White"
+                BorderBrush="#E0E0E0"
+                BorderThickness="0,0,0,1"
+                Padding="20">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- Title -->
+                <StackPanel Grid.Row="0"
+                           Orientation="Horizontal"
+                           Margin="0,0,0,15">
+                    <TextBlock Text="📋"
+                              FontSize="28"
+                              VerticalAlignment="Center"
+                              Margin="0,0,10,0"/>
+                    <TextBlock Text="Quản lý Mượn/Trả Sách"
+                              FontSize="24"
+                              FontWeight="Bold"
+                              Foreground="#263238"
+                              VerticalAlignment="Center"/>
+                </StackPanel>
+
+                <!-- Toolbar -->
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Left: Search & Filter -->
+                    <StackPanel Grid.Column="0"
+                               Orientation="Horizontal">
+                        <!-- Search Box -->
+                        <Border BorderBrush="#BDBDBD"
+                               BorderThickness="1"
+                               CornerRadius="20"
+                               Padding="12,8"
+                               Width="300"
+                               Background="White"
+                               Margin="0,0,15,0">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Grid.Column="0"
+                                          Text="🔍"
+                                          FontSize="16"
+                                          VerticalAlignment="Center"
+                                          Margin="0,0,8,0"/>
+
+                                <TextBox Grid.Column="1"
+                                        Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                                        BorderThickness="0"
+                                        Background="Transparent"
+                                        VerticalAlignment="Center"
+                                        FontSize="14">
+                                    <TextBox.Style>
+                                        <Style TargetType="TextBox">
+                                            <Setter Property="Foreground" Value="#424242"/>
+                                            <Style.Triggers>
+                                                <Trigger Property="Text" Value="">
+                                                    <Setter Property="Background">
+                                                        <Setter.Value>
+                                                            <VisualBrush Stretch="None" AlignmentX="Left">
+                                                                <VisualBrush.Visual>
+                                                                    <TextBlock Text="Tìm kiếm theo tên, email..."
+                                                                             Foreground="#9E9E9E"
+                                                                             FontSize="14"/>
+                                                                </VisualBrush.Visual>
+                                                            </VisualBrush>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBox.Style>
+                                </TextBox>
+                            </Grid>
+                        </Border>
+
+                        <!-- Filter ComboBox -->
+                        <ComboBox ItemsSource="{Binding FilterOptions}"
+                                 SelectedItem="{Binding SelectedFilter}"
+                                 Width="150"
+                                 Padding="10"
+                                 FontSize="14"
+                                 Margin="0,0,15,0"/>
+
+                        <!-- Refresh Button -->
+                        <Button Command="{Binding RefreshCommand}"
+                               Background="#2196F3"
+                               Foreground="White"
+                               BorderThickness="0"
+                               Padding="15,8"
+                               FontSize="14"
+                               Cursor="Hand">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="🔄" FontSize="14" Margin="0,0,5,0"/>
+                                <TextBlock Text="Làm mới"/>
+                            </StackPanel>
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="Button">
+                                                <Border Background="{TemplateBinding Background}"
+                                                       CornerRadius="5"
+                                                       Padding="{TemplateBinding Padding}">
+                                                    <ContentPresenter HorizontalAlignment="Center"
+                                                                    VerticalAlignment="Center"/>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#1976D2"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                    </StackPanel>
+
+                    <!-- Right: Action Buttons -->
+                    <StackPanel Grid.Column="1"
+                               Orientation="Horizontal">
+                        <!-- Create Button -->
+                        <Button Command="{Binding CreateBorrowingCommand}"
+                               Background="#4CAF50"
+                               Foreground="White"
+                               BorderThickness="0"
+                               Padding="20,8"
+                               FontSize="14"
+                               Margin="0,0,10,0"
+                               Cursor="Hand">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="➕" FontSize="14" Margin="0,0,5,0"/>
+                                <TextBlock Text="Tạo phiếu mượn"/>
+                            </StackPanel>
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="Button">
+                                                <Border Background="{TemplateBinding Background}"
+                                                       CornerRadius="5"
+                                                       Padding="{TemplateBinding Padding}">
+                                                    <ContentPresenter HorizontalAlignment="Center"
+                                                                    VerticalAlignment="Center"/>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#388E3C"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+            </Grid>
+        </Border>
+
+        <!-- CONTENT -->
+        <Grid Grid.Row="1" Margin="20">
+            
+            
+            
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="15"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- LEFT: Borrowing List -->
+            <Border Grid.Column="0"
+                   Background="White"
+                   BorderBrush="#E0E0E0"
+                   BorderThickness="1"
+                   CornerRadius="5">
+                <Grid>
+                    <DataGrid ItemsSource="{Binding FilteredBorrowings}"
+         SelectedItem="{Binding SelectedBorrowing}"
+         AutoGenerateColumns="False"
+         IsReadOnly="True"
+         SelectionMode="Single"
+         CanUserAddRows="False"
+         CanUserDeleteRows="False"
+         CanUserReorderColumns="False"
+         CanUserResizeRows="False"
+         HeadersVisibility="Column"
+         GridLinesVisibility="None"
+         BorderThickness="1"
+         BorderBrush="#E0E0E0"
+         Background="White"
+         RowHeight="65"
+         FontSize="13">
+
+                        <DataGrid.ColumnHeaderStyle>
+                            <Style TargetType="DataGridColumnHeader">
+                                <Setter Property="Background" Value="#FAFAFA"/>
+                                <Setter Property="Foreground" Value="#424242"/>
+                                <Setter Property="FontWeight" Value="SemiBold"/>
+                                <Setter Property="FontSize" Value="13"/>
+                                <Setter Property="Padding" Value="15,12"/>
+                                <Setter Property="BorderThickness" Value="0,0,1,1"/>
+                                <Setter Property="BorderBrush" Value="#E0E0E0"/>
+                                <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                            </Style>
+                        </DataGrid.ColumnHeaderStyle>
+
+                        <DataGrid.RowStyle>
+                            <Style TargetType="DataGridRow">
+                                <Setter Property="Background" Value="White"/>
+                                <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                                <Setter Property="BorderBrush" Value="#F0F0F0"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#FAFAFA"/>
+                                    </Trigger>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter Property="Background" Value="#E3F2FD"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGrid.RowStyle>
+
+                        <DataGrid.CellStyle>
+                            <Style TargetType="DataGridCell">
+                                <Setter Property="BorderThickness" Value="0,0,1,0"/>
+                                <Setter Property="BorderBrush" Value="#F0F0F0"/>
+                                <Setter Property="Padding" Value="15,0"/>
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter Property="Background" Value="Transparent"/>
+                                        <Setter Property="Foreground" Value="#424242"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGrid.CellStyle>
+
+                        <DataGrid.Columns>
+                            <!-- Ticket ID -->
+                            <DataGridTextColumn Header="Mã phiếu"
+                          Binding="{Binding TicketId}"
+                          Width="80"/>
+
+                            <!-- Member -->
+                            <DataGridTemplateColumn Header="Thành viên" Width="*" MinWidth="200">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Margin="0,8">
+                                            <TextBlock Text="{Binding MemberName}"
+                                 FontWeight="SemiBold"
+                                 Foreground="#263238"/>
+                                            <TextBlock Text="{Binding MemberEmail}"
+                                 FontSize="11"
+                                 Foreground="#757575"
+                                 Margin="0,2,0,0"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <!-- Borrow Date -->
+                            <DataGridTextColumn Header="Ngày mượn"
+                          Binding="{Binding BorrowDateDisplay}"
+                          Width="100"/>
+
+                            <!-- Due Date -->
+                            <DataGridTextColumn Header="Hạn trả"
+                          Binding="{Binding DueDateDisplay}"
+                          Width="100"/>
+
+                            <!-- Status -->
+                            <DataGridTextColumn Header="Trạng thái"
+                          Binding="{Binding StatusDisplay}"
+                          Width="160">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="FontWeight" Value="SemiBold"/>
+                                        <Setter Property="Padding" Value="5"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+
+                            <!-- Fines -->
+                            <DataGridTextColumn Header="Tiền phạt"
+                          Binding="{Binding FinesDisplay}"
+                          Width="110">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="FontWeight" Value="SemiBold"/>
+                                        <Setter Property="TextAlignment" Value="Right"/>
+                                        <Setter Property="Padding" Value="5"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <Border Background="White"
+       Opacity="0.9"
+       Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}">
+                        <StackPanel VerticalAlignment="Center"
+               HorizontalAlignment="Center">
+                            <ProgressBar IsIndeterminate="True"
+                    Width="200"
+                    Height="4"
+                    Margin="0,0,0,10"/>
+                            <TextBlock Text="Đang tải dữ liệu..."
+                  FontSize="14"
+                  HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>                    
+                </Grid>
+            </Border>
+
+            <!-- RIGHT: Detail Panel -->
+            <Border Grid.Column="2"
+                   Background="White"
+                   BorderBrush="#E0E0E0"
+                   BorderThickness="1"
+                   CornerRadius="5"
+                   Padding="20">
+                <Grid Visibility="{Binding HasSelection, Converter={StaticResource BoolToVisibilityConverter}}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Header -->
+                    <StackPanel Grid.Row="0" Margin="0,0,0,20">
+                        <TextBlock Text="Chi tiết phiếu mượn"
+                                  FontSize="18"
+                                  FontWeight="Bold"
+                                  Foreground="#263238"
+                                  Margin="0,0,0,10"/>
+
+                        <!-- Member Info -->
+                        <Border Background="#F5F5F5"
+                               CornerRadius="5"
+                               Padding="15">
+                            <StackPanel>
+                                <TextBlock Text="{Binding SelectedBorrowing.MemberName}"
+                                          FontSize="16"
+                                          FontWeight="SemiBold"
+                                          Foreground="#263238"/>
+                                <TextBlock Text="{Binding SelectedBorrowing.MemberEmail}"
+                                          FontSize="12"
+                                          Foreground="#757575"
+                                          Margin="0,2,0,0"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Stats -->
+                        <Grid Margin="0,15,0,0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Total Books -->
+                            <StackPanel Grid.Row="0" Grid.Column="0">
+                                <TextBlock Text="Tổng sách" FontSize="11" Foreground="#757575"/>
+                                <TextBlock Text="{Binding SelectedBorrowing.TotalBooks}"
+                                          FontSize="20"
+                                          FontWeight="Bold"
+                                          Foreground="#2196F3"/>
+                            </StackPanel>
+
+                            <!-- Pending -->
+                            <StackPanel Grid.Row="0" Grid.Column="1">
+                                <TextBlock Text="Chờ duyệt" FontSize="11" Foreground="#757575"/>
+                                <TextBlock Text="{Binding SelectedBorrowing.BooksPending}"
+                                          FontSize="20"
+                                          FontWeight="Bold"
+                                          Foreground="#FFA726"/>
+                            </StackPanel>
+
+                            <!-- Not Returned -->
+                            <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,10,0,0">
+                                <TextBlock Text="Chưa trả" FontSize="11" Foreground="#757575"/>
+                                <TextBlock Text="{Binding SelectedBorrowing.BooksNotReturned}"
+                                          FontSize="20"
+                                          FontWeight="Bold"
+                                          Foreground="#FF7043"/>
+                            </StackPanel>
+
+                            <!-- Fines -->
+                            <StackPanel Grid.Row="1" Grid.Column="1" Margin="0,10,0,0">
+                                <TextBlock Text="Tiền phạt" FontSize="11" Foreground="#757575"/>
+                                <TextBlock Text="{Binding SelectedBorrowing.FinesDisplay}"
+                                          FontSize="16"
+                                          FontWeight="Bold"
+                                          Foreground="#F44336"/>
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+
+                    <!-- Books List -->
+                    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                        <ItemsControl ItemsSource="{Binding SelectedBorrowing.Details}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Background="#FAFAFA"
+                                           BorderBrush="#E0E0E0"
+                                           BorderThickness="1"
+                                           CornerRadius="5"
+                                           Padding="10"
+                                           Margin="0,0,0,10">
+                                        <StackPanel>
+                                            <TextBlock Text="{Binding BookTitle}"
+                                                     FontWeight="SemiBold"
+                                                     FontSize="13"
+                                                     TextWrapping="Wrap"
+                                                     Foreground="#263238"/>
+
+                                            <TextBlock Text="{Binding StatusDisplay}"
+                                                     FontSize="11"
+                                                     Foreground="#757575"
+                                                     Margin="0,5,0,0"/>
+
+                                            <TextBlock Text="{Binding OverdueInfo}"
+                                                     FontSize="11"
+                                                     Foreground="#F44336"
+                                                     FontWeight="SemiBold"
+                                                     Margin="0,2,0,0"
+                                                     Visibility="{Binding IsOverdue, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                                        </StackPanel>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+
+                    <!-- Actions -->
+                    <StackPanel Grid.Row="2" Margin="0,20,0,0">
+                        <!-- View Detail Button -->
+                        <Button Command="{Binding ViewDetailCommand}"
+                               Background="#2196F3"
+                               Foreground="White"
+                               BorderThickness="0"
+                               Padding="0,10"
+                               FontSize="13"
+                               Margin="0,0,0,8"
+                               Cursor="Hand">
+                            <TextBlock Text="👁️ Xem chi tiết" HorizontalAlignment="Center"/>
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="Button">
+                                                <Border Background="{TemplateBinding Background}"
+                                                       CornerRadius="5"
+                                                       Padding="{TemplateBinding Padding}">
+                                                    <ContentPresenter HorizontalAlignment="Center"
+                                                                    VerticalAlignment="Center"/>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#1976D2"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+
+                        <!-- Approve Button -->
+                        <Button Command="{Binding ApproveCommand}"
+                               Background="#4CAF50"
+                               Foreground="White"
+                               BorderThickness="0"
+                               Padding="0,10"
+                               FontSize="13"
+                               Margin="0,0,0,8"
+                               Cursor="Hand">
+                            <TextBlock Text="✅ Duyệt" HorizontalAlignment="Center"/>
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="Button">
+                                                <Border Background="{TemplateBinding Background}"
+                                                       CornerRadius="5"
+                                                       Padding="{TemplateBinding Padding}">
+                                                    <ContentPresenter HorizontalAlignment="Center"
+                                                                    VerticalAlignment="Center"/>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#388E3C"/>
+                                        </Trigger>
+                                        <Trigger Property="IsEnabled" Value="False">
+                                            <Setter Property="Background" Value="#BDBDBD"/>
+                                            <Setter Property="Cursor" Value="No"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+
+                        <!-- Reject Button -->
+                        <Button Command="{Binding RejectCommand}"
+                               Background="#F44336"
+                               Foreground="White"
+                               BorderThickness="0"
+                               Padding="0,10"
+                               FontSize="13"
+                               Margin="0,0,0,8"
+                               Cursor="Hand">
+                            <TextBlock Text="❌ Từ chối" HorizontalAlignment="Center"/>
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="Button">
+                                                <Border Background="{TemplateBinding Background}"
+                                                       CornerRadius="5"
+                                                       Padding="{TemplateBinding Padding}">
+                                                    <ContentPresenter HorizontalAlignment="Center"
+                                                                    VerticalAlignment="Center"/>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#D32F2F"/>
+                                        </Trigger>
+                                        <Trigger Property="IsEnabled" Value="False">
+                                            <Setter Property="Background" Value="#BDBDBD"/>
+                                            <Setter Property="Cursor" Value="No"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+
+                        <!-- Return Button -->
+                        <Button Command="{Binding ReturnBookCommand}"
+                               Background="#FF9800"
+                               Foreground="White"
+                               BorderThickness="0"
+                               Padding="0,10"
+                               FontSize="13"
+                               Cursor="Hand">
+                            <TextBlock Text="📥 Trả sách" HorizontalAlignment="Center"/>
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="Button">
+                                                <Border Background="{TemplateBinding Background}"
+                                                       CornerRadius="5"
+                                                       Padding="{TemplateBinding Padding}">
+                                                    <ContentPresenter HorizontalAlignment="Center"
+                                                                    VerticalAlignment="Center"/>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#F57C00"/>
+                                        </Trigger>
+                                        <Trigger Property="IsEnabled" Value="False">
+                                            <Setter Property="Background" Value="#BDBDBD"/>
+                                            <Setter Property="Cursor" Value="No"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </Grid>
+    </Grid>
+</UserControl>

@@ -1,0 +1,254 @@
+﻿@model LibraryWeb.Models.ProfileViewModel
+@{
+    ViewData["Title"] = "Thông tin cá nhân";
+    var imageUrl = ImageUrlHelper.GetFullImageUrl(Model.ImageUrl);
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-3 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body text-center">
+                    @if (!string.IsNullOrEmpty(imageUrl))
+                    {
+                        <img src="@imageUrl" class="rounded-circle mb-3"
+                             style="width: 120px; height: 120px; object-fit: cover;"
+                             alt="Avatar">
+                    }
+                    else
+                    {
+                        <div class="bg-secondary rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center"
+                             style="width: 120px; height: 120px;">
+                            <i class="bi bi-person-fill text-white" style="font-size: 60px;"></i>
+                        </div>
+                    }
+
+                    <h5 class="mb-1">@Model.FullName</h5>
+                    <p class="text-muted mb-3">
+                        <span class="badge bg-@(Model.RoleName == "Member" ? "primary" : "success")">
+                            @Model.RoleName
+                        </span>
+                    </p>
+
+                    <div class="d-grid gap-2">
+                        <a asp-action="Edit" class="btn btn-outline-primary btn-sm">
+                            <i class="bi bi-pencil"></i> Sửa thông tin
+                        </a>
+                        <a asp-action="ChangePassword" class="btn btn-outline-secondary btn-sm">
+                            <i class="bi bi-key"></i> Đổi mật khẩu
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            @if (Model.MemberInfo != null)
+            {
+                <div class="card shadow-sm mt-3">
+                    <div class="card-body">
+                        <h6 class="card-title">
+                            <i class="bi bi-card-text"></i> Thông tin thẻ
+                        </h6>
+                        <hr>
+                        <small class="text-muted">Ngày đăng ký:</small>
+                        <p class="mb-2">@Model.MemberInfo.MembershipDate.ToString("dd/MM/yyyy")</p>
+
+                        @if (Model.MemberInfo.MembershipExpiry.HasValue)
+                        {
+                            <small class="text-muted">Hạn thẻ:</small>
+                            <p class="mb-2">@Model.MemberInfo.MembershipExpiry.Value.ToString("dd/MM/yyyy")</p>
+                        }
+
+                        <small class="text-muted">Giới hạn mượn:</small>
+                        <p class="mb-0">
+                            <strong>@Model.MemberInfo.MaxBorrowLimit</strong> cuốn
+                        </p>
+
+                        @if (Model.MemberInfo.IsSuspended)
+                        {
+                            <div class="alert alert-danger mt-3 mb-0">
+                                <i class="bi bi-exclamation-triangle"></i> Tài khoản bị tạm khóa
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-md-9">
+            <!-- Thông tin cá nhân -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="bi bi-person"></i> Thông tin cá nhân
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-sm-4 fw-bold">
+                            <i class="bi bi-person-badge"></i> Tên đăng nhập:
+                        </div>
+                        <div class="col-sm-8">@Model.Username</div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-sm-4 fw-bold">
+                            <i class="bi bi-person-fill"></i> Họ và tên:
+                        </div>
+                        <div class="col-sm-8">@Model.FullName</div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-sm-4 fw-bold">
+                            <i class="bi bi-envelope"></i> Email:
+                        </div>
+                        <div class="col-sm-8">@Model.Email</div>
+                    </div>
+
+                    @if (!string.IsNullOrEmpty(Model.PhoneNumber))
+                    {
+                        <div class="row mb-3">
+                            <div class="col-sm-4 fw-bold">
+                                <i class="bi bi-telephone"></i> Số điện thoại:
+                            </div>
+                            <div class="col-sm-8">@Model.PhoneNumber</div>
+                        </div>
+                    }
+
+                    @if (!string.IsNullOrEmpty(Model.Address))
+                    {
+                        <div class="row mb-3">
+                            <div class="col-sm-4 fw-bold">
+                                <i class="bi bi-geo-alt"></i> Địa chỉ:
+                            </div>
+                            <div class="col-sm-8">@Model.Address</div>
+                        </div>
+                    }
+
+                    @if (Model.DateOfBirth.HasValue)
+                    {
+                        <div class="row mb-3">
+                            <div class="col-sm-4 fw-bold">
+                                <i class="bi bi-calendar-event"></i> Ngày sinh:
+                            </div>
+                            <div class="col-sm-8">
+                                @Model.DateOfBirth.Value.ToString("dd/MM/yyyy")                               
+                            </div>
+                        </div>
+                    }
+
+                    @if (Model.MemberInfo?.IdCardNumber != null)
+                    {
+                        <div class="row mb-3">
+                            <div class="col-sm-4 fw-bold">
+                                <i class="bi bi-credit-card"></i> CMND/CCCD:
+                            </div>
+                            <div class="col-sm-8">@Model.MemberInfo.IdCardNumber</div>
+                        </div>
+                    }
+
+                    <hr>
+
+                    <div class="row">
+                        <div class="col-sm-4 fw-bold text-muted">
+                            <i class="bi bi-clock"></i> Tham gia:
+                        </div>
+                        <div class="col-sm-8 text-muted">
+                            @Model.CreatedAt.ToString("dd/MM/yyyy HH:mm")
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @if (Model.Stats != null)
+            {
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0">
+                            <i class="bi bi-graph-up"></i> Thống kê mượn sách
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row text-center">
+                            <div class="col-md-3 mb-3">
+                                <div class="p-3 bg-light rounded">
+                                    <i class="bi bi-book text-primary fs-2"></i>
+                                    <h3 class="mt-2 mb-0">@Model.Stats.TotalBorrowed</h3>
+                                    <small class="text-muted">Tổng lượt mượn</small>
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <div class="p-3 bg-light rounded">
+                                    <i class="bi bi-bookmark-check text-success fs-2"></i>
+                                    <h3 class="mt-2 mb-0">@Model.Stats.CurrentBorrowing</h3>
+                                    <small class="text-muted">Đang mượn</small>
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <div class="p-3 bg-light rounded">
+                                    <i class="bi bi-check-circle text-info fs-2"></i>
+                                    <h3 class="mt-2 mb-0">@Model.Stats.TotalReturned</h3>
+                                    <small class="text-muted">Đã trả</small>
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <div class="p-3 bg-light rounded">
+                                    <i class="bi bi-exclamation-triangle text-danger fs-2"></i>
+                                    <h3 class="mt-2 mb-0">@Model.Stats.OverdueBooks</h3>
+                                    <small class="text-muted">Quá hạn</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        @if (Model.Stats.UnpaidFines > 0)
+                        {
+                            <hr>
+                            <div class="alert alert-warning mb-0">
+                                <i class="bi bi-cash"></i>
+                                <strong>Phạt chưa thanh toán:</strong>
+                                <span class="fs-5">@Model.Stats.UnpaidFines.ToString("N0")đ</span>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+
+            <!-- Quick Actions -->
+            <div class="card shadow-sm">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="bi bi-lightning"></i> Thao tác nhanh
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-2">
+                            <a asp-controller="Books" asp-action="Index" class="btn btn-outline-primary w-100">
+                                <i class="bi bi-collection"></i> Xem danh sách sách
+                            </a>
+                        </div>
+                        @if (Model.RoleName == "Member")
+                        {
+                            <div class="col-md-6 mb-2">
+                                <a asp-controller="Borrowing" asp-action="MyBorrowings" class="btn btn-outline-success w-100">
+                                    <i class="bi bi-clock-history"></i> Lịch sử mượn
+                                </a>
+                            </div>
+                        }
+                        <div class="col-md-6 mb-2">
+                            <a asp-action="Edit" class="btn btn-outline-info w-100">
+                                <i class="bi bi-pencil"></i> Chỉnh sửa thông tin
+                            </a>
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <a asp-action="ChangePassword" class="btn btn-outline-warning w-100">
+                                <i class="bi bi-key"></i> Đổi mật khẩu
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

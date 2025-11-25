@@ -1,0 +1,172 @@
+﻿@model LibraryWeb.Models.UpdateProfileViewModel
+@{
+    ViewData["Title"] = "Chỉnh sửa thông tin";
+    var currentImageUrl = ImageUrlHelper.GetFullImageUrl(Model.CurrentImageUrl);
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">
+                        <i class="bi bi-pencil"></i> Chỉnh sửa thông tin
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Edit" method="post" enctype="multipart/form-data">
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                        <!-- Upload ảnh -->
+                        <div class="mb-4 text-center">
+                            <label class="form-label fw-bold">Ảnh đại diện</label>
+
+                            <!-- Preview ảnh hiện tại -->
+                            <div class="mb-3">
+                                @if (!string.IsNullOrEmpty(currentImageUrl))
+                                {
+                                    <img id="currentImage" src="@currentImageUrl"
+                                         class="rounded-circle border"
+                                         style="width: 150px; height: 150px; object-fit: cover;"
+                                         alt="Current Avatar">
+                                }
+                                else
+                                {
+                                    <div id="currentImage"
+                                         class="bg-secondary rounded-circle mx-auto border d-flex align-items-center justify-content-center"
+                                         style="width: 150px; height: 150px;">
+                                        <i class="bi bi-person-fill text-white" style="font-size: 70px;"></i>
+                                    </div>
+                                }
+                            </div>
+
+                            <!-- Preview ảnh mới -->
+                            <div id="newImagePreview" class="mb-3 d-none">
+                                <img id="imagePreview" class="rounded-circle border"
+                                     style="width: 150px; height: 150px; object-fit: cover;"
+                                     alt="New Avatar">
+                            </div>
+
+                            <!-- Button chọn ảnh -->
+                            <div class="mb-2">
+                                <label for="profileImageInput" class="btn btn-outline-primary btn-sm">
+                                    <i class="bi bi-camera"></i> Chọn ảnh mới
+                                </label>
+                                <input type="file"
+                                       id="profileImageInput"
+                                       asp-for="ProfileImage"
+                                       accept="image/*"
+                                       class="d-none"
+                                       onchange="previewImage(event)">
+                            </div>
+
+                            <!-- Checkbox xóa ảnh -->
+                            @if (!string.IsNullOrEmpty(currentImageUrl))
+                            {
+                                <div class="form-check">
+                                    <input asp-for="RemoveImage" class="form-check-input" type="checkbox" id="removeImageCheck">
+                                    <label class="form-check-label text-danger" for="removeImageCheck">
+                                        <small><i class="bi bi-trash"></i> Xóa ảnh đại diện</small>
+                                    </label>
+                                </div>
+                            }
+
+                            <input type="hidden" asp-for="CurrentImageUrl" />
+                            <span asp-validation-for="ProfileImage" class="text-danger small"></span>
+                            <div class="text-muted small mt-2">
+                                <i class="bi bi-info-circle"></i> Chấp nhận: JPG, JPEG, PNG, GIF, WEBP (tối đa 5MB)
+                            </div>
+                        </div>
+
+                        <hr>
+
+                        <div class="mb-3">
+                            <label asp-for="FullName" class="form-label"></label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-person"></i></span>
+                                <input asp-for="FullName" class="form-control" />
+                            </div>
+                            <span asp-validation-for="FullName" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Email" class="form-label"></label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                                <input asp-for="Email" type="email" class="form-control" />
+                            </div>
+                            <span asp-validation-for="Email" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="PhoneNumber" class="form-label"></label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-telephone"></i></span>
+                                <input asp-for="PhoneNumber" class="form-control" />
+                            </div>
+                            <span asp-validation-for="PhoneNumber" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="DateOfBirth" class="form-label"></label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-calendar-event"></i></span>
+                                <input asp-for="DateOfBirth" type="date" class="form-control"
+                                       max="@DateTime.Today.ToString("yyyy-MM-dd")" />
+                            </div>
+                            <span asp-validation-for="DateOfBirth" class="text-danger small"></span>
+                            <small class="text-muted">Ngày sinh của bạn (không bắt buộc)</small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Address" class="form-label"></label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-geo-alt"></i></span>
+                                <textarea asp-for="Address" class="form-control" rows="3"></textarea>
+                            </div>
+                            <span asp-validation-for="Address" class="text-danger small"></span>
+                        </div>
+
+                        <div class="d-flex gap-2 mt-4">
+                            <button type="submit" class="btn btn-primary flex-fill">
+                                <i class="bi bi-check-circle"></i> Lưu thay đổi
+                            </button>
+                            <a asp-action="Index" class="btn btn-secondary">
+                                <i class="bi bi-x-circle"></i> Hủy
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        function previewImage(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('imagePreview').src = e.target.result;
+                    document.getElementById('newImagePreview').classList.remove('d-none');
+                    document.getElementById('currentImage').style.display = 'none';
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Khi check "Xóa ảnh", ẩn preview
+        document.getElementById('removeImageCheck')?.addEventListener('change', function(e) {
+            if (e.target.checked) {
+                document.getElementById('currentImage').style.opacity = '0.3';
+                document.getElementById('newImagePreview').classList.add('d-none');
+            } else {
+                document.getElementById('currentImage').style.opacity = '1';
+            }
+        });
+    </script>
+}

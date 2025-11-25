@@ -1,0 +1,223 @@
+﻿@model List<LibraryWeb.Models.BorrowingTicketViewModel>
+@{
+    ViewData["Title"] = "Lịch sử mượn sách";
+    var currentBorrowings = Model.Where(b => b.Details.Any(d => d.Status == "Đang mượn" || d.Status == "Chờ duyệt")).ToList();
+    var completedBorrowings = Model.Where(b => b.Details.All(d => d.Status == "Đã trả"  || d.Status == "Từ chối")).ToList();
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4">
+        <i class="bi bi-clock-history"></i> Lịch sử mượn sách
+        <small class="text-muted">- @ViewBag.UserName</small>
+    </h2>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info text-center">
+            <i class="bi bi-info-circle fs-1 d-block mb-3"></i>
+            <h5>Bạn chưa mượn sách nào!</h5>
+            <p class="mb-3">Hãy khám phá thư viện và mượn sách yêu thích.</p>
+            <a asp-controller="Books" asp-action="Index" class="btn btn-primary">
+                <i class="bi bi-collection"></i> Xem danh sách sách
+            </a>
+        </div>
+    }
+    else
+    {
+        <!-- Tabs -->
+        <ul class="nav nav-tabs mb-4" role="tablist">
+            <li class="nav-item">
+                <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#current">
+                    <i class="bi bi-book"></i> Đang mượn
+                    <span class="badge bg-primary">@currentBorrowings.Count</span>
+                </button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#completed">
+                    <i class="bi bi-check-circle"></i> Đã trả
+                    <span class="badge bg-success">@completedBorrowings.Count</span>
+                </button>
+            </li>
+        </ul>
+
+        <div class="tab-content">
+            <!-- Tab Đang mượn -->
+            <div class="tab-pane fade show active" id="current">
+                @if (!currentBorrowings.Any())
+                {
+                    <div class="alert alert-secondary">
+                        <i class="bi bi-info-circle"></i> Không có sách đang mượn.
+                    </div>
+                }
+                else
+                {
+                    @foreach (var ticket in currentBorrowings)
+                    {
+                        <div class="card mb-3 shadow-sm">
+                            <div class="card-header bg-primary text-white">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span><i class="bi bi-receipt"></i> Phiếu #@ticket.TicketId</span>
+                                    <span class="badge bg-light text-dark">
+                                        Ngày mượn: @ticket.BorrowDate.ToString("dd/MM/yyyy")
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <p class="mb-1">
+                                            <i class="bi bi-calendar-event"></i> <strong>Hạn trả:</strong>
+                                            <span class="@(ticket.DueDate < DateTime.Now ? "text-danger" : "text-success")">
+                                                @ticket.DueDate.ToString("dd/MM/yyyy")
+                                                @if (ticket.DueDate < DateTime.Now)
+                                                {
+                                                    <span class="badge bg-danger ms-2">Quá hạn</span>
+                                                }
+                                            </span>
+                                        </p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p class="mb-1">
+                                            <i class="bi bi-journals"></i> <strong>Số sách:</strong> @ticket.Details.Count
+                                        </p>
+                                    </div>
+                                </div>
+
+                                @if (!string.IsNullOrEmpty(ticket.Notes))
+                                {
+                                    <div class="alert alert-secondary mb-3">
+                                        <i class="bi bi-chat-left-text"></i> <strong>Ghi chú:</strong> @ticket.Notes
+                                    </div>
+                                }
+
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Sách</th>
+                                            <th>ISBN</th>
+                                            <th>Trạng thái</th>
+                                            <th>Thao tác</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var detail in ticket.Details)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    <strong>@detail.BookTitle</strong>
+                                                    @if (!string.IsNullOrEmpty(detail.Authors))
+                                                    {
+                                                        <br />
+                                    
+                                                        <small class="text-muted">@detail.Authors</small>
+                                                    }
+                                                </td>
+                                                <td><code>@detail.BookIsbn</code></td>
+                                                <td>
+                                                    @if (detail.Status == "Đang mượn")
+                                                    {
+                                                        <span class="badge bg-warning text-dark">Đang mượn</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="badge bg-success">@detail.Status</span>
+                                                    }
+                                                </td>
+                                                <td>
+                                                    @if (detail.Status == "Đang mượn")
+                                                    {
+                                                        <form asp-action="Return" method="post" class="d-inline"
+                                                              onsubmit="return confirm('Bạn có chắc muốn trả sách?');">
+                                                            <input type="hidden" name="bookId" value="@detail.BookId" />
+                                                            <input type="hidden" name ="ticketId" value="@ticket.TicketId"/>
+                                                            <button type="submit" class="btn btn-sm btn-success">
+                                                                <i class="bi bi-arrow-return-left"></i> Trả sách
+                                                            </button>
+                                                        </form>
+                                                    }
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+
+                                <div class="text-end">
+                                    <a asp-action="Details" asp-route-id="@ticket.TicketId" class="btn btn-sm btn-outline-primary">
+                                        <i class="bi bi-eye"></i> Chi tiết
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+
+            <!-- Tab Đã trả -->
+            <div class="tab-pane fade" id="completed">
+                @if (!completedBorrowings.Any())
+                {
+                    <div class="alert alert-secondary">
+                        <i class="bi bi-info-circle"></i> Chưa có lịch sử trả sách.
+                    </div>
+                }
+                else
+                {
+                    @foreach (var ticket in completedBorrowings)
+                    {
+                        <div class="card mb-3">
+                            <div class="card-header bg-success text-white">
+                                <div class="d-flex justify-content-between">
+                                    <span><i class="bi bi-receipt"></i> Phiếu #@ticket.TicketId</span>
+                                    <span class="badge bg-light text-dark">Đã trả xong</span>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="row mb-2">
+                                    <div class="col-md-6">
+                                        <small class="text-muted">
+                                            <i class="bi bi-calendar"></i> Ngày mượn: @ticket.BorrowDate.ToString("dd/MM/yyyy")
+                                        </small>
+                                    </div>
+                                    <div class="col-md-6 text-end">
+                                        <small class="text-muted">
+                                            <i class="bi bi-journals"></i> @ticket.Details.Count sách
+                                        </small>
+                                    </div>
+                                </div>
+
+                                <ul class="list-group list-group-flush">
+                                    @foreach (var detail in ticket.Details)
+                                    {
+                                        <li class="list-group-item">
+                                            <div class="d-flex justify-content-between">
+                                                <div>
+                                                    <strong>@detail.BookTitle</strong>
+                                                    <br /><small class="text-muted">ISBN: @detail.BookIsbn</small>
+                                                </div>
+                                                <div class="text-end">
+                                                    <span class="badge bg-success">@detail.Status</span>
+                                                    @if (detail.ReturnDate.HasValue)
+                                                    {
+                                                        <br />
+                                    
+                                                        <small class="text-muted">@detail.ReturnDate.Value.ToString("dd/MM/yyyy")</small>
+                                                    }
+                                                </div>
+                                            </div>
+                                        </li>
+                                    }
+                                </ul>
+
+                                <div class="text-end mt-2">
+                                    <a asp-action="Details" asp-route-id="@ticket.TicketId" class="btn btn-sm btn-outline-secondary">
+                                        <i class="bi bi-eye"></i> Chi tiết
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+    }
+</div>

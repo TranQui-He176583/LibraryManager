@@ -1,0 +1,73 @@
+﻿@model LibraryWeb.Models.CreateBorrowingViewModel
+@{
+    ViewData["Title"] = "Mượn sách";
+}
+
+<div class="row justify-content-center mt-4">
+    <div class="col-md-8 col-lg-6">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0"><i class="bi bi-book"></i> Mượn sách</h4>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-info">
+                    <i class="bi bi-info-circle"></i> <strong>Lưu ý:</strong>
+                    <ul class="mb-0 mt-2">
+                        <li>Thời gian mượn: <strong>14 ngày</strong></li>
+                        <li>Hạn trả: <strong>@DateTime.Now.AddDays(14).ToString("dd/MM/yyyy")</strong></li>
+                        <li>Quá hạn phạt: <strong>5,000đ/ngày</strong></li>
+                    </ul>
+                </div>
+
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5>Thông tin sách:</h5>
+                        <table class="table table-borderless mb-0">
+                            <tr>
+                                <td class="fw-bold" style="width: 100px;">Tên sách:</td>
+                                <td>@Model.BookTitle</td>
+                            </tr>
+                            <tr>
+                                <td class="fw-bold">ISBN:</td>
+                                <td>@Model.BookIsbn</td>
+                            </tr>
+                            <tr>
+                                <td class="fw-bold">Giá:</td>
+                                <td class="text-danger">@Model.BookPrice?.ToString("N0")đ</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+                <form asp-action="Create" method="post">
+                    <input type="hidden" asp-for="BookId" />
+                    <input type="hidden" asp-for="BookTitle" />
+                    <input type="hidden" asp-for="BookIsbn" />
+                    <input type="hidden" asp-for="BookPrice" />
+
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                    <div class="mb-3">
+                        <label asp-for="Notes" class="form-label">Ghi chú (không bắt buộc)</label>
+                        <textarea asp-for="Notes" class="form-control" rows="3"
+                                  placeholder="Nhập ghi chú nếu cần..."></textarea>
+                        <span asp-validation-for="Notes" class="text-danger small"></span>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary flex-fill">
+                            <i class="bi bi-check-circle"></i> Xác nhận mượn
+                        </button>
+                        <a asp-controller="Books" asp-action="Index" class="btn btn-secondary">
+                            <i class="bi bi-x-circle"></i> Hủy
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
