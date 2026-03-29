@@ -1,0 +1,9 @@
+﻿c:\Users\quyka\source\repos\LibraryManager\Proejct\WPF-Staff-Admin\ViewModels\DashboardViewModel.cs(77,72): error CS1061: 'BorrowingTicketDTO' does not contain a definition for 'Status' and no accessible extension method 'Status' accepting a first argument of type 'BorrowingTicketDTO' could be found (are you missing a using directive or an assembly reference?) [c:\Users\quyka\source\repos\LibraryManager\Proejct\WPF-Staff-Admin\WPF-Staff-Admin_tntyjdyy_wpftmp.csproj]
+c:\Users\quyka\source\repos\LibraryManager\Proejct\WPF-Staff-Admin\ViewModels\DashboardViewModel.cs(77,98): error CS1061: 'BorrowingTicketDTO' does not contain a definition for 'Status' and no accessible extension method 'Status' accepting a first argument of type 'BorrowingTicketDTO' could be found (are you missing a using directive or an assembly reference?) [c:\Users\quyka\source\repos\LibraryManager\Proejct\WPF-Staff-Admin\WPF-Staff-Admin_tntyjdyy_wpftmp.csproj]
+c:\Users\quyka\source\repos\LibraryManager\Proejct\WPF-Staff-Admin\ViewModels\DashboardViewModel.cs(78,73): error CS1061: 'BorrowingTicketDTO' does not contain a definition for 'Status' and no accessible extension method 'Status' accepting a first argument of type 'BorrowingTicketDTO' could be found (are you missing a using directive or an assembly reference?) [c:\Users\quyka\source\repos\LibraryManager\Proejct\WPF-Staff-Admin\WPF-Staff-Admin_tntyjdyy_wpftmp.csproj]
+
+Build FAILED.
+    4 Warning(s)
+    3 Error(s)
+
+Time Elapsed 00:00:02.09

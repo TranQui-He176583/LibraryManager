@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
 using System.Windows;
 using System.Windows.Input;
 using WPF_Staff_Admin.Helpers;
@@ -78,7 +78,12 @@ namespace WPF_Staff_Admin.ViewModels
         public void NavigateToDashboard()
         {
             CurrentViewTitle = "Dashboard";
-            CurrentView = new DashboardView();
+
+            var bookService = App.ServiceProvider.GetRequiredService<IBookService>();
+            var borrowingService = App.ServiceProvider.GetRequiredService<IBorrowingService>();
+            var dashboardViewModel = new DashboardViewModel(bookService, borrowingService);
+
+            CurrentView = new DashboardView(dashboardViewModel);
         }
 
         private void NavigateToBooks()

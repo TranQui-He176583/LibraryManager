@@ -19,6 +19,25 @@ html {
 
 body {
   margin-bottom: 60px;
+  background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+  /* To make it more lively, a soft blue-purple animated gradient */
+  background: linear-gradient(-45deg, #f0f4fd, #e0c3fc, #8ec5fc, #f0f4fd);
+  background-size: 400% 400%;
+  animation: gradientBG 15s ease infinite;
+  background-attachment: fixed;
+  font-family: 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+@keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Ensure cards and main structural elements pop against the background */
+.card, .bg-white {
+    box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+    border: none;
 }
 
 .form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {

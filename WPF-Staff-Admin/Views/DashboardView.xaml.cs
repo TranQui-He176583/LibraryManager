@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,13 +18,10 @@ namespace WPF_Staff_Admin.Views
 {
     public partial class DashboardView : UserControl
     {
-        public DashboardView()
+        public DashboardView(WPF_Staff_Admin.ViewModels.DashboardViewModel viewModel)
         {
             InitializeComponent();
-            DataContext = new
-            {
-                UserFullName = SessionManager.Instance.CurrentUser?.FullName ?? "User"
-            };
+            DataContext = viewModel;
         }
     }
 }
