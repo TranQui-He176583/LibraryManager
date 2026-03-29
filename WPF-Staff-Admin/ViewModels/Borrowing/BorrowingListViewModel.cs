@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -237,6 +237,8 @@ namespace WPF_Staff_Admin.ViewModels.Borrowing
             try
             {
                 IsLoading = true;
+                int successCount = 0;
+                var errors = new List<string>();
 
                 foreach (var detail in pendingDetails)
                 {
@@ -248,19 +250,31 @@ namespace WPF_Staff_Admin.ViewModels.Borrowing
 
                     var response = await _borrowingService.ApproveBorrowingAsync(request);
 
-                    if (!response.Success)
+                    if (response.Success)
                     {
-                        _dialogService.ShowError($"Lỗi duyệt sách '{detail.BookTitle}': {response.Message}");
-                        break;
+                        successCount++;
+                    }
+                    else
+                    {
+                        errors.Add($"Sách '{detail.BookTitle}': {response.Message}");
                     }
                 }
 
-                _dialogService.ShowSuccess("Duyệt mượn sách thành công!");
+                if (successCount > 0)
+                {
+                    _dialogService.ShowSuccess($"Duyệt thành công {successCount} sách!");
+                }
+                
+                if (errors.Any())
+                {
+                    _dialogService.ShowError("Một số sách không thể duyệt:\n" + string.Join("\n", errors));
+                }
+
                 await LoadBorrowingsAsync();
             }
             catch (Exception ex)
             {
-                _dialogService.ShowError($"Lỗi: {ex.Message}");
+                _dialogService.ShowError($"Lỗi hệ thống: {ex.Message}");
             }
             finally
             {
@@ -298,6 +312,8 @@ namespace WPF_Staff_Admin.ViewModels.Borrowing
             try
             {
                 IsLoading = true;
+                int successCount = 0;
+                var errors = new List<string>();
 
                 foreach (var detail in pendingDetails)
                 {
@@ -310,19 +326,31 @@ namespace WPF_Staff_Admin.ViewModels.Borrowing
 
                     var response = await _borrowingService.RejectBorrowingAsync(request);
 
-                    if (!response.Success)
+                    if (response.Success)
                     {
-                        _dialogService.ShowError($"Lỗi từ chối sách '{detail.BookTitle}': {response.Message}");
-                        break;
+                        successCount++;
+                    }
+                    else
+                    {
+                        errors.Add($"Sách '{detail.BookTitle}': {response.Message}");
                     }
                 }
 
-                _dialogService.ShowSuccess("Từ chối thành công!");
+                if (successCount > 0)
+                {
+                    _dialogService.ShowSuccess($"Từ chối thành công {successCount} sách!");
+                }
+                
+                if (errors.Any())
+                {
+                    _dialogService.ShowError("Một số sách không thể từ chối:\n" + string.Join("\n", errors));
+                }
+
                 await LoadBorrowingsAsync();
             }
             catch (Exception ex)
             {
-                _dialogService.ShowError($"Lỗi: {ex.Message}");
+                _dialogService.ShowError($"Lỗi hệ thống: {ex.Message}");
             }
             finally
             {

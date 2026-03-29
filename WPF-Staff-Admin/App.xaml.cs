@@ -88,6 +88,9 @@ namespace WPF_Staff_Admin
             services.AddTransient<MainViewModel>();
             services.AddTransient<BookListViewModel>();
             services.AddTransient<BorrowingListViewModel>();
+            services.AddTransient<WPF_Staff_Admin.ViewModels.Authors.AuthorListViewModel>();
+            services.AddTransient<WPF_Staff_Admin.ViewModels.Categories.CategoryListViewModel>();
+            services.AddTransient<WPF_Staff_Admin.ViewModels.Publishers.PublisherListViewModel>();
 
 
             services.AddTransient<LoginWindow>();

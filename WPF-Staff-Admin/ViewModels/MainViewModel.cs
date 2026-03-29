@@ -137,19 +137,49 @@ namespace WPF_Staff_Admin.ViewModels
         private void NavigateToAuthors()
         {
             CurrentViewTitle = "Quản lý Tác giả";
-            CurrentView = CreatePlaceholderView("Author Management - Đang phát triển");
+
+            var authorService = App.ServiceProvider.GetRequiredService<IAuthorService>();
+            var dialogService = App.ServiceProvider.GetRequiredService<IDialogService>();
+
+            var authorListViewModel = new WPF_Staff_Admin.ViewModels.Authors.AuthorListViewModel(
+                authorService,
+                dialogService
+            );
+
+            var authorListView = new WPF_Staff_Admin.Views.Authors.AuthorListView(authorListViewModel);
+            CurrentView = authorListView;
         }
 
         private void NavigateToCategories()
         {
             CurrentViewTitle = "Quản lý Thể loại";
-            CurrentView = CreatePlaceholderView("Category Management - Đang phát triển");
+
+            var categoryService = App.ServiceProvider.GetRequiredService<ICategoryService>();
+            var dialogService = App.ServiceProvider.GetRequiredService<IDialogService>();
+
+            var categoryListViewModel = new WPF_Staff_Admin.ViewModels.Categories.CategoryListViewModel(
+                categoryService,
+                dialogService
+            );
+
+            var categoryListView = new WPF_Staff_Admin.Views.Categories.CategoryListView(categoryListViewModel);
+            CurrentView = categoryListView;
         }
 
         private void NavigateToPublishers()
         {
             CurrentViewTitle = "Quản lý Nhà xuất bản";
-            CurrentView = CreatePlaceholderView("Publisher Management - Đang phát triển");
+
+            var publisherService = App.ServiceProvider.GetRequiredService<IPublisherService>();
+            var dialogService = App.ServiceProvider.GetRequiredService<IDialogService>();
+
+            var publisherListViewModel = new WPF_Staff_Admin.ViewModels.Publishers.PublisherListViewModel(
+                publisherService,
+                dialogService
+            );
+
+            var publisherListView = new WPF_Staff_Admin.Views.Publishers.PublisherListView(publisherListViewModel);
+            CurrentView = publisherListView;
         }
 
         private void NavigateToFines()

@@ -1,0 +1,263 @@
+{
+  "$schema": "http://json.schemastore.org/sarif-1.0.0",
+  "version": "1.0.0",
+  "runs": [
+    {
+      "tool": {
+        "name": "Microsoft (R) Visual C# Compiler",
+        "version": "4.14.0.0",
+        "fileVersion": "4.14.0-3.25465.8 (b0a9adbf)",
+        "semanticVersion": "4.14.0",
+        "language": "en-US"
+      },
+      "results": [
+        {
+          "ruleId": "CS0234",
+          "level": "error",
+          "message": "The type or namespace name 'Commands' does not exist in the namespace 'WPF_Staff_Admin' (are you missing an assembly reference?)",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/quyka/source/repos/LibraryManager/Proejct/WPF-Staff-Admin/ViewModels/Categories/CategoryFormViewModel.cs",
+                "region": {
+                  "startLine": 6,
+                  "startColumn": 23,
+                  "endLine": 6,
+                  "endColumn": 31
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CS0234",
+          "level": "error",
+          "message": "The type or namespace name 'Commands' does not exist in the namespace 'WPF_Staff_Admin' (are you missing an assembly reference?)",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/quyka/source/repos/LibraryManager/Proejct/WPF-Staff-Admin/ViewModels/Categories/CategoryListViewModel.cs",
+                "region": {
+                  "startLine": 10,
+                  "startColumn": 23,
+                  "endLine": 10,
+                  "endColumn": 31
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CS0234",
+          "level": "error",
+          "message": "The type or namespace name 'Commands' does not exist in the namespace 'WPF_Staff_Admin' (are you missing an assembly reference?)",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/quyka/source/repos/LibraryManager/Proejct/WPF-Staff-Admin/ViewModels/Publishers/PublisherFormViewModel.cs",
+                "region": {
+                  "startLine": 6,
+                  "startColumn": 23,
+                  "endLine": 6,
+                  "endColumn": 31
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CS0234",
+          "level": "error",
+          "message": "The type or namespace name 'Commands' does not exist in the namespace 'WPF_Staff_Admin' (are you missing an assembly reference?)",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/quyka/source/repos/LibraryManager/Proejct/WPF-Staff-Admin/ViewModels/Publishers/PublisherListViewModel.cs",
+                "region": {
+                  "startLine": 10,
+                  "startColumn": 23,
+                  "endLine": 10,
+                  "endColumn": 31
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CS0246",
+          "level": "error",
+          "message": "The type or namespace name 'IDialogService' could not be found (are you missing a using directive or an assembly reference?)",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/quyka/source/repos/LibraryManager/Proejct/WPF-Staff-Admin/ViewModels/Categories/CategoryFormViewModel.cs",
+                "region": {
+                  "startLine": 15,
+                  "startColumn": 26,
+                  "endLine": 15,
+                  "endColumn": 40
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CS0246",
+          "level": "error",
+          "message": "The type or namespace name 'IDialogService' could not be found (are you missing a using directive or an assembly reference?)",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/quyka/source/repos/LibraryManager/Proejct/WPF-Staff-Admin/ViewModels/Categories/CategoryFormViewModel.cs",
+                "region": {
+                  "startLine": 24,
+                  "startColumn": 72,
+                  "endLine": 24,
+                  "endColumn": 86
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CS0246",
+          "level": "error",
+          "message": "The type or namespace name 'IDialogService' could not be found (are you missing a using directive or an assembly reference?)",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/quyka/source/repos/LibraryManager/Proejct/WPF-Staff-Admin/ViewModels/Publishers/PublisherFormViewModel.cs",
+                "region": {
+                  "startLine": 15,
+                  "startColumn": 26,
+                  "endLine": 15,
+                  "endColumn": 40
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CS0246",
+          "level": "error",
+          "message": "The type or namespace name 'IDialogService' could not be found (are you missing a using directive or an assembly reference?)",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/quyka/source/repos/LibraryManager/Proejct/WPF-Staff-Admin/ViewModels/Publishers/PublisherFormViewModel.cs",
+                "region": {
+                  "startLine": 25,
+                  "startColumn": 75,
+                  "endLine": 25,
+                  "endColumn": 89
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CS0246",
+          "level": "error",
+          "message": "The type or namespace name 'IDialogService' could not be found (are you missing a using directive or an assembly reference?)",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/quyka/source/repos/LibraryManager/Proejct/WPF-Staff-Admin/ViewModels/Categories/CategoryListViewModel.cs",
+                "region": {
+                  "startLine": 20,
+                  "startColumn": 26,
+                  "endLine": 20,
+                  "endColumn": 40
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CS0246",
+          "level": "error",
+          "message": "The type or namespace name 'IDialogService' could not be found (are you missing a using directive or an assembly reference?)",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/quyka/source/repos/LibraryManager/Proejct/WPF-Staff-Admin/ViewModels/Categories/CategoryListViewModel.cs",
+                "region": {
+                  "startLine": 30,
+                  "startColumn": 72,
+                  "endLine": 30,
+                  "endColumn": 86
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CS0246",
+          "level": "error",
+          "message": "The type or namespace name 'IDialogService' could not be found (are you missing a using directive or an assembly reference?)",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/quyka/source/repos/LibraryManager/Proejct/WPF-Staff-Admin/ViewModels/Publishers/PublisherListViewModel.cs",
+                "region": {
+                  "startLine": 20,
+                  "startColumn": 26,
+                  "endLine": 20,
+                  "endColumn": 40
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CS0246",
+          "level": "error",
+          "message": "The type or namespace name 'IDialogService' could not be found (are you missing a using directive or an assembly reference?)",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/quyka/source/repos/LibraryManager/Proejct/WPF-Staff-Admin/ViewModels/Publishers/PublisherListViewModel.cs",
+                "region": {
+                  "startLine": 30,
+                  "startColumn": 75,
+                  "endLine": 30,
+                  "endColumn": 89
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "rules": {
+        "CS0234": {
+          "id": "CS0234",
+          "defaultLevel": "error",
+          "helpUri": "https://msdn.microsoft.com/query/roslyn.query?appId=roslyn&k=k(CS0234)",
+          "properties": {
+            "category": "Compiler",
+            "isEnabledByDefault": true,
+            "tags": [
+              "Compiler",
+              "Telemetry",
+              "NotConfigurable"
+            ]
+          }
+        },
+        "CS0246": {
+          "id": "CS0246",
+          "defaultLevel": "error",
+          "helpUri": "https://msdn.microsoft.com/query/roslyn.query?appId=roslyn&k=k(CS0246)",
+          "properties": {
+            "category": "Compiler",
+            "isEnabledByDefault": true,
+            "tags": [
+              "Compiler",
+              "Telemetry",
+              "NotConfigurable"
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,369 @@
+<UserControl x:Class="WPF_Staff_Admin.Views.Authors.AuthorListView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="700" d:DesignWidth="1000">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0"
+                Background="White"
+                BorderBrush="#E0E0E0"
+                BorderThickness="1"
+                CornerRadius="5"
+                Padding="15"
+                Margin="0,0,0,15">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <Border Grid.Column="0"
+                       BorderBrush="#BDBDBD"
+                       BorderThickness="1"
+                       CornerRadius="3"
+                       Margin="0,0,10,0">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Column="0"
+                                  Text="🔍"
+                                  FontSize="16"
+                                  VerticalAlignment="Center"
+                                  Margin="10,0,5,0"
+                                  Opacity="0.6"/>
+
+                        <TextBox Grid.Column="1"
+                                Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}"
+                                BorderThickness="0"
+                                Background="Transparent"
+                                Padding="5"
+                                FontSize="14"
+                                VerticalContentAlignment="Center">
+                            <TextBox.InputBindings>
+                                <KeyBinding Key="Enter" Command="{Binding SearchCommand}"/>
+                            </TextBox.InputBindings>
+                            <TextBox.Style>
+                                <Style TargetType="TextBox">
+                                    <Style.Triggers>
+                                        <Trigger Property="Text" Value="">
+                                            <Setter Property="Background">
+                                                <Setter.Value>
+                                                    <VisualBrush Stretch="None" AlignmentX="Left">
+                                                        <VisualBrush.Visual>
+                                                            <TextBlock Text="Tìm kiếm theo tên tác giả..."
+                                                                      Foreground="#9E9E9E"
+                                                                      FontSize="14"
+                                                                      Margin="5,0,0,0"/>
+                                                        </VisualBrush.Visual>
+                                                    </VisualBrush>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBox.Style>
+                        </TextBox>
+                    </Grid>
+                </Border>
+
+                <Button Grid.Column="1"
+                       Content="Tìm kiếm"
+                       Command="{Binding SearchCommand}"
+                       Background="#2196F3"
+                       Foreground="White"
+                       BorderThickness="0"
+                       Padding="20,8"
+                       FontSize="14">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border Background="{TemplateBinding Background}"
+                                               CornerRadius="3"
+                                               Padding="{TemplateBinding Padding}">
+                                            <ContentPresenter HorizontalAlignment="Center"
+                                                            VerticalAlignment="Center"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#1976D2"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+            </Grid>
+        </Border>
+
+        <Border Grid.Row="1"
+                Background="White"
+                BorderBrush="#E0E0E0"
+                BorderThickness="1"
+                CornerRadius="5"
+                Padding="15"
+                Margin="0,0,0,15">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Column="0"
+                          Text="{Binding PageInfo}"
+                          FontSize="14"
+                          VerticalAlignment="Center"
+                          Foreground="#616161"/>
+
+                <StackPanel Grid.Column="1"
+                           Orientation="Horizontal">
+                    <Button Content="➕ Thêm Tác giả"
+                           Command="{Binding AddAuthorCommand}"
+                           Background="#4CAF50"
+                           Foreground="White"
+                           BorderThickness="0"
+                           Padding="15,8"
+                           FontSize="14"
+                           Margin="0,0,10,0">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Background="{TemplateBinding Background}"
+                                                   CornerRadius="3"
+                                                   Padding="{TemplateBinding Padding}">
+                                                <ContentPresenter HorizontalAlignment="Center"
+                                                                VerticalAlignment="Center"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#388E3C"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+
+                    <Button Content="✏️ Sửa"
+                           Command="{Binding EditAuthorCommand}"
+                           CommandParameter="{Binding SelectedAuthor}"
+                           Background="#FF9800"
+                           Foreground="White"
+                           BorderThickness="0"
+                           Padding="15,8"
+                           FontSize="14"
+                           Margin="0,0,10,0">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Background="{TemplateBinding Background}"
+                                                   CornerRadius="3"
+                                                   Padding="{TemplateBinding Padding}">
+                                                <ContentPresenter HorizontalAlignment="Center"
+                                                                VerticalAlignment="Center"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#F57C00"/>
+                                    </Trigger>
+                                    <Trigger Property="IsEnabled" Value="False">
+                                        <Setter Property="Background" Value="#BDBDBD"/>
+                                        <Setter Property="Cursor" Value="No"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+
+                    <Button Content="🗑️ Xóa"
+                           Command="{Binding DeleteAuthorCommand}"
+                           CommandParameter="{Binding SelectedAuthor}"
+                           Background="#F44336"
+                           Foreground="White"
+                           BorderThickness="0"
+                           Padding="15,8"
+                           FontSize="14"
+                           Margin="0,0,10,0">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Background="{TemplateBinding Background}"
+                                                   CornerRadius="3"
+                                                   Padding="{TemplateBinding Padding}">
+                                                <ContentPresenter HorizontalAlignment="Center"
+                                                                VerticalAlignment="Center"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#D32F2F"/>
+                                    </Trigger>
+                                    <Trigger Property="IsEnabled" Value="False">
+                                        <Setter Property="Background" Value="#BDBDBD"/>
+                                        <Setter Property="Cursor" Value="No"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+
+                    <Button Content="🔄 Làm mới"
+                           Command="{Binding RefreshCommand}"
+                           Background="#2196F3"
+                           Foreground="White"
+                           BorderThickness="0"
+                           Padding="15,8"
+                           FontSize="14">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Background="{TemplateBinding Background}"
+                                                   CornerRadius="3"
+                                                   Padding="{TemplateBinding Padding}">
+                                                <ContentPresenter HorizontalAlignment="Center"
+                                                                VerticalAlignment="Center"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#1976D2"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <Border Grid.Row="2"
+                Background="White"
+                BorderBrush="#E0E0E0"
+                BorderThickness="1"
+                CornerRadius="5">
+            <Grid>
+                <DataGrid ItemsSource="{Binding FilteredAuthors}"
+                         SelectedItem="{Binding SelectedAuthor}"
+                         AutoGenerateColumns="False"
+                         IsReadOnly="True"
+                         SelectionMode="Single"
+                         CanUserAddRows="False"
+                         CanUserDeleteRows="False"
+                         GridLinesVisibility="Horizontal"
+                         HeadersVisibility="Column"
+                         Background="White"
+                         BorderThickness="0"
+                         RowHeight="50"
+                         FontSize="14">
+
+                    <DataGrid.ColumnHeaderStyle>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="Background" Value="#F5F5F5"/>
+                            <Setter Property="Foreground" Value="#424242"/>
+                            <Setter Property="FontWeight" Value="SemiBold"/>
+                            <Setter Property="Padding" Value="10"/>
+                            <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                            <Setter Property="BorderBrush" Value="#E0E0E0"/>
+                            <Setter Property="Height" Value="40"/>
+                        </Style>
+                    </DataGrid.ColumnHeaderStyle>
+
+                    <DataGrid.RowStyle>
+                        <Style TargetType="DataGridRow">
+                            <Setter Property="Background" Value="White"/>
+                            <Setter Property="Cursor" Value="Hand"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#E3F2FD"/>
+                                </Trigger>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter Property="Background" Value="#BBDEFB"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGrid.RowStyle>
+
+                    <DataGrid.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Setter Property="BorderThickness" Value="0"/>
+                            <Setter Property="Padding" Value="10,0"/>
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter Property="Background" Value="Transparent"/>
+                                    <Setter Property="Foreground" Value="Black"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGrid.CellStyle>
+
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Mã Tác giả"
+                                          Binding="{Binding AuthorId}"
+                                          Width="150"
+                                          ElementStyle="{StaticResource {x:Type TextBlock}}"/>
+
+                        <DataGridTextColumn Header="Tên Tác giả"
+                                          Binding="{Binding AuthorName}"
+                                          Width="*"
+                                          MinWidth="300">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="FontWeight" Value="SemiBold"/>
+                                    <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+
+                <Border Background="#F0F0F0"
+                       Opacity="0.8"
+                       Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}">
+                    <StackPanel VerticalAlignment="Center"
+                               HorizontalAlignment="Center">
+                        <ProgressBar IsIndeterminate="True"
+                                    Width="200"
+                                    Height="4"
+                                    Margin="0,0,0,10"/>
+                        <TextBlock Text="Đang tải dữ liệu..."
+                                  FontSize="14"
+                                  Foreground="#424242"
+                                  HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

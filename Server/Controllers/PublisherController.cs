@@ -1,32 +1,48 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Server.DTOs;
-using Server.Models;
-using Microsoft.EntityFrameworkCore;
-using Server;
 using Server.Services;
+
 namespace Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     public class PublisherController : ControllerBase
     {
-        private IBookService _bookService;
+        private readonly IPublisherService _publisherService;
 
-        public PublisherController(IBookService bookService)
+        public PublisherController(IPublisherService publisherService)
         {
-           _bookService = bookService;
+            _publisherService = publisherService;
         }
 
         [HttpGet]
         public async Task<ActionResult<ApiResponseDTO<List<PublisherDTO>>>> GetPublishers()
         {
-           return await _bookService.GetPublishers();
+            return await _publisherService.GetAllPublishers();
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<ApiResponseDTO<PublisherDTO>>> GetPublisher(int id)
         {
-           return await _bookService.GetPublisher(id);
+            return await _publisherService.GetPublisher(id);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<ApiResponseDTO<PublisherDTO>>> Create([FromBody] PublisherDTO request)
+        {
+            return await _publisherService.CreatePublisher(request);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult<ApiResponseDTO<PublisherDTO>>> Update(int id, [FromBody] PublisherDTO request)
+        {
+            return await _publisherService.UpdatePublisher(id, request);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<ApiResponseDTO<bool>>> Delete(int id)
+        {
+            return await _publisherService.DeletePublisher(id);
         }
     }
 }

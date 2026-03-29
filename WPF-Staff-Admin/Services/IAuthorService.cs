@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,5 +9,8 @@ namespace WPF_Staff_Admin.Services
     public interface IAuthorService
     {
         Task<ApiResponse<List<AuthorDTO>>> GetAllAuthorsAsync();
+        Task<ApiResponse<AuthorDTO>> CreateAuthorAsync(AuthorDTO request);
+        Task<ApiResponse<AuthorDTO>> UpdateAuthorAsync(int id, AuthorDTO request);
+        Task<ApiResponse<bool>> DeleteAuthorAsync(int id);
     }
 }

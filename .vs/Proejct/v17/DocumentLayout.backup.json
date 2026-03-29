@@ -14,7 +14,7 @@
       "DocumentGroups": [
         {
           "DockedHeight": 376,
-          "SelectedChildIndex": 167,
+          "SelectedChildIndex": 169,
           "Children": [
             {
               "$type": "Bookmark",
@@ -685,6 +685,14 @@
               "Name": "ST:3:0:{e8034f19-ab72-4f06-83fd-f6832b41aa63}"
             },
             {
+              "$type": "Bookmark",
+              "Name": "ST:97:0:{e8034f19-ab72-4f06-83fd-f6832b41aa63}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:98:0:{e8034f19-ab72-4f06-83fd-f6832b41aa63}"
+            },
+            {
               "$type": "Document",
               "DocumentIndex": 0,
               "Title": "Details.cshtml",
@@ -696,14 +704,6 @@
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2026-03-29T08:27:17.852Z",
               "EditorCaption": ""
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:95:0:{e8034f19-ab72-4f06-83fd-f6832b41aa63}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:96:0:{e8034f19-ab72-4f06-83fd-f6832b41aa63}"
             }
           ]
         },

@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Server.DTOs;
 using Server.Models;
 namespace Server.Services
@@ -280,7 +280,6 @@ namespace Server.Services
                 }
 
                 detail.Status = "Đang mượn";
-                detail.Book.AvailableQuantity--;
 
                 await _context.SaveChangesAsync();
                 await transaction.CommitAsync();

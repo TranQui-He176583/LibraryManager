@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Server.DTOs;
 using Server.Services;
 
@@ -151,7 +151,7 @@ namespace Server.Controllers
                     return BadRequest(new { message ="Respone null" });
                 }
 
-                return Ok(new { apiResponse.Message });
+                return Ok(apiResponse);
             }
             catch (Exception ex)
             {
@@ -171,7 +171,7 @@ namespace Server.Controllers
                     return BadRequest(new { message = "Service sai" });
                 }
 
-                return Ok(new { message = apiResponse.Message });
+                return Ok(apiResponse);
             }
             catch (Exception ex)
             {

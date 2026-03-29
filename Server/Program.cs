@@ -79,6 +79,7 @@ namespace Server
             builder.Services.AddScoped<IBookService, BookService>();
             builder.Services.AddScoped<IAuthorService, AuthorService>();
             builder.Services.AddScoped<ICategoryService, CategoryService>();
+            builder.Services.AddScoped<IPublisherService, PublisherService>();
             builder.Services.AddScoped<IBorrowingService, BorrowingService>();
             var app = builder.Build();
 
