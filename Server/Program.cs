@@ -81,6 +81,7 @@ namespace Server
             builder.Services.AddScoped<ICategoryService, CategoryService>();
             builder.Services.AddScoped<IPublisherService, PublisherService>();
             builder.Services.AddScoped<IBorrowingService, BorrowingService>();
+            builder.Services.AddScoped<IFineService, FineService>();
             var app = builder.Build();
 
 

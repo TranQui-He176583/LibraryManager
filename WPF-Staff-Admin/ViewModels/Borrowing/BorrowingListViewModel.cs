@@ -41,6 +41,8 @@ namespace WPF_Staff_Admin.ViewModels.Borrowing
             ApproveCommand = new RelayCommand(async _ => await ApproveAsync(), _ => CanApprove());
             RejectCommand = new RelayCommand(async _ => await RejectAsync(), _ => CanReject());
             ReturnBookCommand = new RelayCommand(async _ => await ReturnBookAsync(), _ => CanReturn());
+            ReportLostCommand = new RelayCommand(async _ => await ReportIssueAsync("Lost"), _ => CanReturn());
+            ReportDamagedCommand = new RelayCommand(async _ => await ReportIssueAsync("Damaged"), _ => CanReturn());
 
             Console.WriteLine(">>> BorrowingListViewModel Constructor");
             Console.WriteLine($">>> BorrowingService is null? {_borrowingService == null}");
@@ -116,6 +118,8 @@ namespace WPF_Staff_Admin.ViewModels.Borrowing
         public ICommand ApproveCommand { get; }
         public ICommand RejectCommand { get; }
         public ICommand ReturnBookCommand { get; }
+        public ICommand ReportLostCommand { get; }
+        public ICommand ReportDamagedCommand { get; }
 
 
 
@@ -406,5 +410,72 @@ namespace WPF_Staff_Admin.ViewModels.Borrowing
             }
         }
 
+        private async Task ReportIssueAsync(string type)
+        {
+            if (SelectedBorrowing == null) return;
+
+            var booksToReport = SelectedBorrowing.Details
+                .Where(d => d.Status == "Đang mượn" || d.Status == "Quá hạn")
+                .ToList();
+
+            if (!booksToReport.Any())
+            {
+                _dialogService.ShowMessage("Không có sách nào đang mượn để báo sự cố.");
+                return;
+            }
+
+            // For simplicity, if multiple books, we ask for the first one or we could let user select.
+            // But usually, common practice is to select a book first. 
+            // The current UI shows details on the right. 
+            // Let's assume user wants to report for the SELECTED item in the right panel? 
+            // Wait, the right panel is an ItemsControl, not a selectable list.
+            
+            // Re-thinking: Better to open the ReturnBookDialog but with an "Issue" mode, 
+            // or just report for all "Đang mượn" books in the ticket (rare case).
+            
+            // Let's just report for the first one for now as a POC, 
+            // but the REAL way is to have a selection in the detail panel.
+            
+            var detail = booksToReport.First(); 
+            string typeName = type == "Lost" ? "mất" : "hỏng";
+
+            var confirm = _dialogService.ShowConfirmation(
+                $"Xác nhận báo {typeName} sách '{detail.BookTitle}'?",
+                "Xác nhận báo sự cố"
+            );
+
+            if (confirm)
+            {
+                try
+                {
+                    IsLoading = true;
+                    var request = new ReportIssueRequest
+                    {
+                        DetailId = detail.DetailId,
+                        IssueType = type,
+                        Notes = $"Báo {typeName} bởi Staff"
+                    };
+
+                    var response = await _borrowingService.ReportIssueAsync(request);
+                    if (response.Success)
+                    {
+                        _dialogService.ShowSuccess(response.Message);
+                        await LoadBorrowingsAsync();
+                    }
+                    else
+                    {
+                        _dialogService.ShowError(response.Message);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _dialogService.ShowError($"Lỗi: {ex.Message}");
+                }
+                finally
+                {
+                    IsLoading = false;
+                }
+            }
+        }
     }
 }

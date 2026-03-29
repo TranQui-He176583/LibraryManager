@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -97,6 +97,21 @@ namespace WPF_Staff_Admin.Models
         public bool IsPaid { get; set; }
         public DateTime? PaidDate { get; set; }
         public DateTime? CreatedAt { get; set; }
+        public string? Notes { get; set; }
+
+        public string? MemberName { get; set; }
+        public string? BookTitle { get; set; }
+
+        public string CreatedAtDisplay => CreatedAt?.ToString("dd/MM/yyyy HH:mm") ?? "-";
+        public string PaidDateDisplay => PaidDate?.ToString("dd/MM/yyyy HH:mm") ?? "-";
+        public string AmountDisplay => $"{Amount:N0} VNĐ";
+        public string StatusDisplay => IsPaid ? "✅ Đã thanh toán" : "❌ Chưa thanh toán";
+    }
+
+    public class ReportIssueRequest
+    {
+        public int DetailId { get; set; }
+        public string IssueType { get; set; } = "Lost"; // "Lost" or "Damaged"
         public string? Notes { get; set; }
     }
     public class ApproveBorrowingRequest

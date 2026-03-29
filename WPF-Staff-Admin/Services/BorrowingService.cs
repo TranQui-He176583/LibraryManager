@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -311,6 +311,44 @@ namespace WPF_Staff_Admin.Services
                 {
                     Success = true,
                     Message = "Trả sách thành công"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse
+                {
+                    Success = false,
+                    Message = "Lỗi kết nối API",
+                    Error = ex.Message
+                };
+            }
+        }
+
+        public async Task<ApiResponse> ReportIssueAsync(ReportIssueRequest request)
+        {
+            try
+            {
+                var response = await _httpClient.PostAsJsonAsync($"{_baseUrl}/api/Fines/report-issue", request);
+                var jsonString = await response.Content.ReadAsStringAsync();
+
+                var apiResponse = JsonSerializer.Deserialize<ApiResponse>(
+                    jsonString,
+                    new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
+                );
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    return apiResponse ?? new ApiResponse
+                    {
+                        Success = false,
+                        Message = $"Lỗi: {response.StatusCode}"
+                    };
+                }
+
+                return apiResponse ?? new ApiResponse
+                {
+                    Success = true,
+                    Message = "Báo cáo sự cố thành công"
                 };
             }
             catch (Exception ex)

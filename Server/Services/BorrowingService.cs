@@ -119,9 +119,77 @@ namespace Server.Services
                 detail.Book.UpdatedAt = DateTime.Now;
             }
 
-            await _context.SaveChangesAsync();
+            // Create fine if overdue
+            if (detail.ReturnDate > detail.Ticket.DueDate)
+            {
+                var daysOverdue = (detail.ReturnDate.Value - detail.Ticket.DueDate).Days;
+                if (daysOverdue > 0)
+                {
+                    var fine = new Fine
+                    {
+                        BorrowDetailId = detail.DetailId,
+                        Amount = daysOverdue * 5000,
+                        Reason = "Trả muộn",
+                        CreatedAt = DateTime.Now,
+                        IsPaid = false
+                    };
+                    _context.Fines.Add(fine);
+                }
+            }
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                var innerMsg = ex.InnerException != null ? " Inner: " + ex.InnerException.Message : "";
+                throw new Exception($"Lỗi lưu dữ liệu: {ex.Message}{innerMsg}");
+            }
 
             return MapToDetailDTO(detail);
+        }
+
+        public async Task<ApiResponse> ReportLostOrDamagedAsync(ReportIssueDTO dto)
+        {
+            try
+            {
+                var detail = await _context.BorrowingDetails
+                    .Include(bd => bd.Book)
+                    .Include(bd => bd.Ticket)
+                    .FirstOrDefaultAsync(bd => bd.DetailId == dto.DetailId);
+
+                if (detail == null)
+                    return new ApiResponse { Success = false, Message = "Không tìm thấy thông tin mượn sách" };
+
+                if (detail.Status == "Đã trả" || detail.Status == "Mất" || detail.Status == "Hỏng")
+                    return new ApiResponse { Success = false, Message = "Sách này đã được xử lý" };
+
+                detail.Status = dto.IssueType == "Lost" ? "Mất" : "Hỏng";
+                detail.ReturnDate = DateTime.Now;
+
+                // Create fine equal to book price
+                var fine = new Fine
+                {
+                    BorrowDetailId = detail.DetailId,
+                    Amount = detail.Book.Price ?? 0,
+                    Reason = dto.IssueType == "Lost" ? "Mất sách" : "Làm hỏng sách",
+                    CreatedAt = DateTime.Now,
+                    IsPaid = false,
+                    Notes = dto.Notes
+                };
+
+                _context.Fines.Add(fine);
+                
+                // Note: We don't increment AvailableQuantity because the book is lost/damaged
+                
+                await _context.SaveChangesAsync();
+                return new ApiResponse { Success = true, Message = $"Đã ghi nhận sách bị {detail.Status.ToLower()} và tạo phiếu phạt." };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse { Success = false, Message = "Lỗi: " + ex.Message };
+            }
         }
  
         public async Task<List<BorrowingTicketResponseDTO>> GetMemberBorrowingsAsync(int memberId)

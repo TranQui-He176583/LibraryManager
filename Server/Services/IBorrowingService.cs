@@ -1,4 +1,4 @@
-﻿using Server.DTOs;
+using Server.DTOs;
 
 namespace Server.Services
 {
@@ -14,5 +14,6 @@ namespace Server.Services
         Task<ApiResponse> RejectBorrowingAsync(RejectBorrowingDTO dto);
 
         Task UpdateOverdueStatusAsync();
+        Task<ApiResponse> ReportLostOrDamagedAsync(ReportIssueDTO dto);
     }
 }

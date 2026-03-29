@@ -8,6 +8,7 @@ using WPF_Staff_Admin.Views;
 using WPF_Staff_Admin.Views.Borrowing;
 using WPF_Staff_Admin.ViewModels.Users;
 using WPF_Staff_Admin.Views.Users;
+using WPF_Staff_Admin.ViewModels.Fines;
 
 namespace WPF_Staff_Admin.ViewModels
 {
@@ -200,7 +201,17 @@ namespace WPF_Staff_Admin.ViewModels
         private void NavigateToFines()
         {
             CurrentViewTitle = "Quản lý Phạt";
-            CurrentView = CreatePlaceholderView("Fine Management - Đang phát triển");
+
+            var fineService = App.ServiceProvider.GetRequiredService<IFineService>();
+            var dialogService = App.ServiceProvider.GetRequiredService<IDialogService>();
+
+            var fineListViewModel = new FineListViewModel(
+                fineService,
+                dialogService
+            );
+
+            var fineListView = new Views.Fines.FineListView(fineListViewModel);
+            CurrentView = fineListView;
         }
 
         private void NavigateToReports()

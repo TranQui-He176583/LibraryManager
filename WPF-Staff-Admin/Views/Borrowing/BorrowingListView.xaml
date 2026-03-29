@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="WPF_Staff_Admin.Views.Borrowing.BorrowingListView"
+<UserControl x:Class="WPF_Staff_Admin.Views.Borrowing.BorrowingListView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -90,31 +90,13 @@
                                           Margin="0,0,8,0"/>
 
                                 <TextBox Grid.Column="1"
-                                        Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
-                                        BorderThickness="0"
-                                        Background="Transparent"
-                                        VerticalAlignment="Center"
-                                        FontSize="14">
-                                    <TextBox.Style>
-                                        <Style TargetType="TextBox">
-                                            <Setter Property="Foreground" Value="#424242"/>
-                                            <Style.Triggers>
-                                                <Trigger Property="Text" Value="">
-                                                    <Setter Property="Background">
-                                                        <Setter.Value>
-                                                            <VisualBrush Stretch="None" AlignmentX="Left">
-                                                                <VisualBrush.Visual>
-                                                                    <TextBlock Text="Tìm kiếm theo tên, email..."
-                                                                             Foreground="#9E9E9E"
-                                                                             FontSize="14"/>
-                                                                </VisualBrush.Visual>
-                                                            </VisualBrush>
-                                                        </Setter.Value>
-                                                    </Setter>
-                                                </Trigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </TextBox.Style>
+                                         Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                                         Padding="40,10,15,10"
+                                         FontSize="14"
+                                         VerticalContentAlignment="Center"
+                                         BorderThickness="0"
+                                         Style="{StaticResource SearchTextBoxStyle}"
+                                         Tag="Tìm kiếm theo tên, email...">
                                 </TextBox>
                             </Grid>
                         </Border>
@@ -602,6 +584,7 @@
                                BorderThickness="0"
                                Padding="0,10"
                                FontSize="13"
+                               Margin="0,0,0,8"
                                Cursor="Hand">
                             <TextBlock Text="📥 Trả sách" HorizontalAlignment="Center"/>
                             <Button.Style>
@@ -625,6 +608,77 @@
                                         <Trigger Property="IsEnabled" Value="False">
                                             <Setter Property="Background" Value="#BDBDBD"/>
                                             <Setter Property="Cursor" Value="No"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+
+                        <!-- Report Lost Button -->
+                        <Button Command="{Binding ReportLostCommand}"
+                               Background="#C0392B"
+                               Foreground="White"
+                               BorderThickness="0"
+                               Padding="0,10"
+                               FontSize="13"
+                               Margin="0,0,0,8"
+                               Cursor="Hand">
+                            <TextBlock Text="🚩 Báo mất sách" HorizontalAlignment="Center"/>
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="Button">
+                                                <Border Background="{TemplateBinding Background}"
+                                                       CornerRadius="5"
+                                                       Padding="{TemplateBinding Padding}">
+                                                    <ContentPresenter HorizontalAlignment="Center"
+                                                                    VerticalAlignment="Center"/>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#A93226"/>
+                                        </Trigger>
+                                        <Trigger Property="IsEnabled" Value="False">
+                                            <Setter Property="Background" Value="#BDBDBD"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+
+                        <!-- Report Damaged Button -->
+                        <Button Command="{Binding ReportDamagedCommand}"
+                               Background="#D35400"
+                               Foreground="White"
+                               BorderThickness="0"
+                               Padding="0,10"
+                               FontSize="13"
+                               Cursor="Hand">
+                            <TextBlock Text="⚠️ Báo hỏng sách" HorizontalAlignment="Center"/>
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="Button">
+                                                <Border Background="{TemplateBinding Background}"
+                                                       CornerRadius="5"
+                                                       Padding="{TemplateBinding Padding}">
+                                                    <ContentPresenter HorizontalAlignment="Center"
+                                                                    VerticalAlignment="Center"/>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#BA4A00"/>
+                                        </Trigger>
+                                        <Trigger Property="IsEnabled" Value="False">
+                                            <Setter Property="Background" Value="#BDBDBD"/>
                                         </Trigger>
                                     </Style.Triggers>
                                 </Style>

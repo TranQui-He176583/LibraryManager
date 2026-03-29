@@ -10,6 +10,7 @@ using WPF_Staff_Admin.Services;
 using WPF_Staff_Admin.ViewModels;
 using WPF_Staff_Admin.ViewModels.Borrowing;
 using WPF_Staff_Admin.ViewModels.Users;
+using WPF_Staff_Admin.ViewModels.Fines;
 using WPF_Staff_Admin.Views;
 using System.Runtime.InteropServices;
 using System.Net.Http;
@@ -90,6 +91,8 @@ namespace WPF_Staff_Admin
                     sp.GetRequiredService<IConfiguration>()
                 ));
 
+            services.AddSingleton<IFineService, FineService>();
+
             services.AddTransient<LoginViewModel>();
             services.AddTransient<MainViewModel>();
             services.AddTransient<BookListViewModel>();
@@ -98,6 +101,7 @@ namespace WPF_Staff_Admin
             services.AddTransient<WPF_Staff_Admin.ViewModels.Categories.CategoryListViewModel>();
             services.AddTransient<WPF_Staff_Admin.ViewModels.Publishers.PublisherListViewModel>();
             services.AddTransient<UserListViewModel>();
+            services.AddTransient<FineListViewModel>();
 
 
             services.AddTransient<LoginWindow>();

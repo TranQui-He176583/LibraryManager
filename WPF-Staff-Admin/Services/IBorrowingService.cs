@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,6 +19,8 @@ namespace WPF_Staff_Admin.Services
         Task<ApiResponse> RejectBorrowingAsync(RejectBorrowingRequest request);
 
         Task<ApiResponse> ReturnBookAsync(ReturnBookRequest request);
+
+        Task<ApiResponse> ReportIssueAsync(ReportIssueRequest request);
 
         Task<ApiResponse> UpdateOverdueStatusAsync();
     }

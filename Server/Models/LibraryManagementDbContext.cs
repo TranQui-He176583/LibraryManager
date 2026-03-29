@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 
@@ -168,6 +168,7 @@ public partial class LibraryManagementDbContext : DbContext
             entity.HasKey(e => e.FineId).HasName("PK__Fines__9D4A9B2CE6A3D928");
 
             entity.Property(e => e.Amount).HasColumnType("decimal(18, 2)");
+            entity.Property(e => e.IsPaid).HasColumnName("IsPaid");
             entity.Property(e => e.CreatedAt)
                 .HasPrecision(0)
                 .HasDefaultValueSql("(getdate())");

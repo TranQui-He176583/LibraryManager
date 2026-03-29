@@ -1,4 +1,4 @@
-﻿namespace Server.DTOs
+namespace Server.DTOs
 {
     public class BorrowingCreateDTO
     {
@@ -57,6 +57,17 @@
         public bool IsPaid { get; set; }
         public DateTime? PaidDate { get; set; }
         public DateTime? CreatedAt { get; set; }
+        public string? Notes { get; set; }
+        
+        // Extended info for UI
+        public string? MemberName { get; set; }
+        public string? BookTitle { get; set; }
+    }
+
+    public class ReportIssueDTO
+    {
+        public int DetailId { get; set; }
+        public string IssueType { get; set; } = "Lost"; // "Lost" or "Damaged"
         public string? Notes { get; set; }
     }
     public class ApproveBorrowingDTO
