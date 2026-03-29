@@ -1,0 +1,1 @@
+   1:7>C:\Users\quyka\source\repos\LibraryManager\Proejct\Server\Program.cs(7,43): error CS0234: The type or namespace name 'JwtBearer' does not exist in the namespace 'Microsoft.AspNetCore.Authentication' (are you missing an assembly reference?) [C:\Users\quyka\source\repos\LibraryManager\Proejct\Server\Server.csproj]

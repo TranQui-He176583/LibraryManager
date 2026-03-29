@@ -1,18 +1,30 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Server.Models;
 
 public partial class User
 {
+    [Key]
     public int UserId { get; set; }
 
+    [Required]
+    [StringLength(50)]
     public string Username { get; set; } = null!;
 
+    [Required]
+    [StringLength(255)]
     public string PasswordHash { get; set; } = null!;
 
+    [Required]
+    [StringLength(150)]
     public string FullName { get; set; } = null!;
 
+    [Required]
+    [EmailAddress]
+    [StringLength(100)]
     public string Email { get; set; } = null!;
 
     public string? PhoneNumber { get; set; }

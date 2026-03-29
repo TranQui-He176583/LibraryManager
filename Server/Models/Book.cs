@@ -1,14 +1,21 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Server.Models;
 
 public partial class Book
 {
+    [Key]
     public int BookId { get; set; }
 
+    [StringLength(20)]
+    [Column("ISBN")]
     public string? Isbn { get; set; }
 
+    [Required]
+    [StringLength(300)]
     public string Title { get; set; } = null!;
 
     public int? PublisherId { get; set; }

@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Configuration;
 using System;
@@ -11,6 +11,7 @@ using WPF_Staff_Admin.ViewModels;
 using WPF_Staff_Admin.ViewModels.Borrowing;
 using WPF_Staff_Admin.Views;
 using System.Runtime.InteropServices;
+using System.Net.Http;
 namespace WPF_Staff_Admin
 {
     public partial class App : Application
@@ -44,21 +45,44 @@ namespace WPF_Staff_Admin
         {
             services.AddSingleton(Configuration);
 
-            // HttpClient
-            services.AddHttpClient();
+            services.AddTransient<WPF_Staff_Admin.Helpers.AuthHandler>();
+
+            services.AddHttpClient("ApiClient")
+                .AddHttpMessageHandler<WPF_Staff_Admin.Helpers.AuthHandler>();
+
+            services.AddHttpClient("AuthClient");
 
             // Services
-            services.AddSingleton<IApiService, ApiService>();
-            services.AddSingleton<IAuthService, AuthService>();
+            services.AddSingleton<IApiService>(sp => 
+                new ApiService(
+                    sp.GetRequiredService<IHttpClientFactory>().CreateClient("ApiClient"),
+                    sp.GetRequiredService<IConfiguration>()
+                ));
+
+            services.AddSingleton<IFileUploadService>(sp => 
+                new FileUploadService(
+                    sp.GetRequiredService<IHttpClientFactory>().CreateClient("ApiClient"),
+                    sp.GetRequiredService<IConfiguration>()
+                ));
+
+            services.AddSingleton<IBorrowingService>(sp => 
+                new BorrowingService(
+                    sp.GetRequiredService<IHttpClientFactory>().CreateClient("ApiClient"),
+                    sp.GetRequiredService<IConfiguration>()
+                ));
+
+            services.AddSingleton<IAuthService>(sp => 
+                new AuthService(
+                    sp.GetRequiredService<IHttpClientFactory>().CreateClient("AuthClient"),
+                    sp.GetRequiredService<IConfiguration>()
+                ));
+
             services.AddSingleton<IDialogService, DialogService>();
             services.AddSingleton<INavigationService, NavigationService>();
             services.AddSingleton<IBookService, BookService>();           
             services.AddSingleton<IAuthorService, AuthorService>();       
             services.AddSingleton<ICategoryService, CategoryService>();
             services.AddSingleton<IPublisherService, PublisherService>();
-            services.AddSingleton<IBorrowingService, BorrowingService>();
-            services.AddSingleton<IFileUploadService, FileUploadService>();
-
 
             services.AddTransient<LoginViewModel>();
             services.AddTransient<MainViewModel>();

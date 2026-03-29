@@ -1,4 +1,4 @@
-﻿using LibraryWeb.Models;
+using LibraryWeb.Models;
 using LibraryWeb.Services;
 using Microsoft.AspNetCore.Mvc;
 namespace LibraryWeb.Controllers
@@ -23,11 +23,18 @@ namespace LibraryWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
-            if (!ModelState.IsValid) return View(model);
+            if (!ModelState.IsValid) 
+            {
+                if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                    return Json(new { success = false, message = "Vui lòng nhập đầy đủ thông tin" });
+                return View(model);
+            }
 
             var result = await _apiService.LoginAsync(model);
             if (result == null)
             {
+                if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                    return Json(new { success = false, message = "Tên đăng nhập hoặc mật khẩu không đúng!" });
                 ModelState.AddModelError("", "Tên đăng nhập hoặc mật khẩu không đúng!");
                 return View(model);
             }
@@ -38,13 +45,19 @@ namespace LibraryWeb.Controllers
             HttpContext.Session.SetString("FullName", result.FullName);
             HttpContext.Session.SetString("RoleName", result.RoleName);
             
+            if (!string.IsNullOrEmpty(result.Token))
+                HttpContext.Session.SetString("Token", result.Token);
+                
             if (!string.IsNullOrEmpty(result.Email))
                 HttpContext.Session.SetString("Email", result.Email);
 
             TempData["SuccessMessage"] = $"Chào mừng {result.FullName}!";
-            return result.RoleName == "Member"
-                ? RedirectToAction("Index", "Books")
-                : RedirectToAction("Index", "Home");
+            string redirectUrl = result.RoleName == "Member" ? Url.Action("Index", "Books") : Url.Action("Index", "Home");
+            
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                return Json(new { success = true, redirectUrl, token = result.Token });
+
+            return Redirect(redirectUrl);
         }
 
         public IActionResult Logout()

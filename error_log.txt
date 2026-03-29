@@ -1,0 +1,10 @@
+﻿c:\Users\quyka\source\repos\LibraryManager\Proejct\WPF-Staff-Admin\App.xaml.cs(57,43): error CS0246: The type or namespace name 'IHttpClientFactory' could not be found (are you missing a using directive or an assembly reference?) [c:\Users\quyka\source\repos\LibraryManager\Proejct\WPF-Staff-Admin\WPF-Staff-Admin_p0hbdtvv_wpftmp.csproj]
+c:\Users\quyka\source\repos\LibraryManager\Proejct\WPF-Staff-Admin\App.xaml.cs(63,43): error CS0246: The type or namespace name 'IHttpClientFactory' could not be found (are you missing a using directive or an assembly reference?) [c:\Users\quyka\source\repos\LibraryManager\Proejct\WPF-Staff-Admin\WPF-Staff-Admin_p0hbdtvv_wpftmp.csproj]
+c:\Users\quyka\source\repos\LibraryManager\Proejct\WPF-Staff-Admin\App.xaml.cs(69,43): error CS0246: The type or namespace name 'IHttpClientFactory' could not be found (are you missing a using directive or an assembly reference?) [c:\Users\quyka\source\repos\LibraryManager\Proejct\WPF-Staff-Admin\WPF-Staff-Admin_p0hbdtvv_wpftmp.csproj]
+c:\Users\quyka\source\repos\LibraryManager\Proejct\WPF-Staff-Admin\App.xaml.cs(75,43): error CS0246: The type or namespace name 'IHttpClientFactory' could not be found (are you missing a using directive or an assembly reference?) [c:\Users\quyka\source\repos\LibraryManager\Proejct\WPF-Staff-Admin\WPF-Staff-Admin_p0hbdtvv_wpftmp.csproj]
+
+Build FAILED.
+    4 Warning(s)
+    4 Error(s)
+
+Time Elapsed 00:00:01.95

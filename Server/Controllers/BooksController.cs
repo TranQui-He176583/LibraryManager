@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Server.DTOs;
 using Server.Models;
 using Server.Services;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.OData.Query;
 namespace Server.Controllers
 {
 
@@ -18,6 +20,13 @@ namespace Server.Controllers
         {
             _context = context;
             _bookService = bookService;
+        }
+
+        [HttpGet("odata")]
+        [EnableQuery]
+        public IQueryable<Book> GetBooksOData()
+        {
+            return _context.Books.AsQueryable();
         }
 
         [HttpGet]
@@ -92,11 +101,13 @@ namespace Server.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult<ApiResponseDTO<BookDetailDTO>>> CreateBook([FromBody] CreateBookRequest request)
         {
             return await _bookService.CreateBook(request);
         }
         [HttpPut("{id}")]
+        [Authorize]
         public async Task<ActionResult<ApiResponseDTO<BookDetailDTO>>> UpdateBook(int id, [FromBody] UpdateBookRequest request)
         {
             return await _bookService.UpdateBook(id, request);
@@ -115,6 +126,7 @@ namespace Server.Controllers
         }
 
         [HttpDelete("Delete")]
+        [Authorize]
         public ActionResult<ApiResponse> DeleteBook([FromQuery] int bookId)
         {
             return _bookService.DeleteBook(bookId);

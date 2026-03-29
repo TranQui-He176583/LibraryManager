@@ -1,8 +1,220 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+@model LibraryWeb.Models.HomeViewModel
+
+@{
+    ViewData["Title"] = "Trang chủ";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+@section Styles {
+    <style>
+        .hero-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 80px 0;
+            border-radius: 1rems;
+            margin-bottom: 3rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-title {
+            font-weight: 800;
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 30px;
+        }
+
+        .hero-graphics {
+            position: absolute;
+            right: 5%;
+            top: 10%;
+            height: 80%;
+            opacity: 0.2;
+            pointer-events: none;
+        }
+
+        .book-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border-radius: 12px;
+            overflow: hidden;
+            height: 100%;
+        }
+
+        .book-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+        }
+
+        .book-card .card-img-top {
+            height: 250px;
+            object-fit: cover;
+            border-bottom: 1px solid #eee;
+        }
+
+        .book-card .card-body {
+            padding: 1.25rem;
+        }
+
+        .book-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            line-clamp: 2; /* Ensures standards compliance */
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-bottom: 0.5rem;
+        }
+
+        .book-author {
+            color: #6c757d;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .btn-custom-outline {
+            border: 2px solid white;
+            color: white;
+            font-weight: 600;
+            padding: 10px 30px;
+            border-radius: 50px;
+            transition: all 0.3s;
+        }
+
+        .btn-custom-outline:hover {
+            background-color: white;
+            color: #764ba2;
+        }
+
+        .section-title {
+            font-weight: 700;
+            margin-bottom: 2rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            width: 50%;
+            height: 4px;
+            background: #764ba2;
+            bottom: -10px;
+            left: 0;
+            border-radius: 2px;
+        }
+    </style>
+}
+
+<!-- Hero Section -->
+<div class="hero-section rounded-4">
+    <div class="container position-relative z-1">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h1 class="hero-title">Chào mừng đến với Thư viện!</h1>
+                <p class="hero-subtitle">Mở ra không gian tri thức vô tận. Hàng nghìn cuốn sách từ văn học, kinh tế, công nghệ cho đến khoa học chờ bạn khám phá.</p>
+                <div class="d-flex gap-3">
+                    <a asp-controller="Books" asp-action="Index" class="btn btn-light btn-lg rounded-pill fw-bold text-primary px-4 shadow-sm">
+                        <i class="bi bi-search"></i> Tìm đầu sách
+                    </a>
+                    @if (Context.Session.GetInt32("UserId") == null)
+                    {
+                        <a asp-controller="Auth" asp-action="Login" class="btn btn-custom-outline btn-lg shadow-sm">
+                            Đăng nhập ngay
+                        </a>
+                    }
+                </div>
+            </div>
+            <div class="col-lg-6 d-none d-lg-block text-end">
+                <!-- Abstract visual or icon, an actual image would go here if provided -->
+                <i class="bi bi-book-half text-white opacity-25" style="font-size: 15rem; line-height: 1;"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Books Section -->
+<div class="container mb-5">
+    <div class="d-flex justify-content-between align-items-end mb-4">
+        <h2 class="section-title">Sách nổi bật gần đây</h2>
+        <a asp-controller="Books" asp-action="Index" class="text-decoration-none text-primary fw-bold">
+            Xem tất cả <i class="bi bi-arrow-right"></i>
+        </a>
+    </div>
+
+    @if (Model.RecentBooks != null && Model.RecentBooks.Any())
+    {
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+            @foreach (var book in Model.RecentBooks)
+            {
+                <div class="col">
+                    <div class="card book-card h-100" onclick="location.href='@Url.Action("Details", "Books", new { id = book.BookId })'">
+                        <img src="@(string.IsNullOrEmpty(book.ImageUrl) ? "https://via.placeholder.com/300x400?text=No+Image" : book.ImageUrl)" 
+                             class="card-img-top" alt="@book.Title">
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="book-title">@book.Title</h5>
+                            <p class="book-author"><i class="bi bi-building"></i> @book.PublisherName</p>
+                            
+                            <div class="mt-auto d-flex justify-content-between align-items-center">
+                                <span class="badge bg-light text-dark border">
+                                    <i class="bi bi-journal-text text-primary"></i> @book.Language
+                                </span>
+                                @if (book.AvailableQuantity > 0)
+                                {
+                                    <span class="badge bg-success-subtle text-success">Còn sách (@book.AvailableQuantity)</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-danger-subtle text-danger">Hết sách</span>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info text-center">
+            <i class="bi bi-info-circle fs-4 d-block mb-2"></i>
+            Chưa có thông tin sách nào được cập nhật.
+        </div>
+    }
+</div>
+
+<!-- Highlight Features Section -->
+<div class="container mb-5 mt-5 pt-4 border-top">
+    <div class="row text-center g-4">
+        <div class="col-md-4">
+            <div class="p-4 rounded-4 bg-light h-100">
+                <i class="bi bi-collection-fill text-primary" style="font-size: 3rem;"></i>
+                <h4 class="mt-3 fw-bold">Kho Sách Đa Dạng</h4>
+                <p class="text-muted">Hơn hàng nghìn đầu sách khác nhau thuộc nhiều thể loại, liên tục được cập nhật hàng tuần.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="p-4 rounded-4 bg-light h-100">
+                <i class="bi bi-laptop text-primary" style="font-size: 3rem;"></i>
+                <h4 class="mt-3 fw-bold">Dễ Dàng Đăng Ký</h4>
+                <p class="text-muted">Thực hiện đăng ký và theo dõi quá trình mượn sách qua nền tảng trực tuyến thuận tiện 24/7.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="p-4 rounded-4 bg-light h-100">
+                <i class="bi bi-stars text-primary" style="font-size: 3rem;"></i>
+                <h4 class="mt-3 fw-bold">Dịch Vụ Nhanh Chóng</h4>
+                <p class="text-muted">Được hỗ trợ tận tình bởi đội ngũ thư viện, đem lại trải nghiệm hài lòng tuyệt đối.</p>
+            </div>
+        </div>
+    </div>
 </div>

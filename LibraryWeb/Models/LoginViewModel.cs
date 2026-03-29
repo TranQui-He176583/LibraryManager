@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
 namespace LibraryWeb.Models
 {
@@ -19,6 +19,7 @@ namespace LibraryWeb.Models
         public string FullName { get; set; } = null!;
         public string? Email { get; set; }
         public string RoleName { get; set; } = null!;
+        public string? Token { get; set; }
         public string Message { get; set; } = null!;
     }
 }

@@ -4,9 +4,16 @@ var builder = WebApplication.CreateBuilder(args);
 //
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddHttpClient<IApiService, ApiService>();
-builder.Services.AddHttpClient<IBookService, BookService>();
-builder.Services.AddHttpClient<IBorrowingService, BorrowingService>();
+
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddTransient<AuthHandler>();
+
+builder.Services.AddHttpClient<IApiService, ApiService>()
+    .AddHttpMessageHandler<AuthHandler>();
+builder.Services.AddHttpClient<IBookService, BookService>()
+    .AddHttpMessageHandler<AuthHandler>();
+builder.Services.AddHttpClient<IBorrowingService, BorrowingService>()
+    .AddHttpMessageHandler<AuthHandler>();
 
 
 builder.Services.AddSession(options =>

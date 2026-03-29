@@ -1,4 +1,4 @@
-﻿@model LibraryWeb.Models.LoginViewModel
+@model LibraryWeb.Models.LoginViewModel
 @{
     ViewData["Title"] = "Đăng nhập";
 }
@@ -11,7 +11,8 @@
                     <i class="bi bi-book"></i> Đăng nhập
                 </h2>
 
-                <form asp-action="Login" method="post">
+                <form asp-action="Login" method="post" id="loginForm">
+                    <div id="ajaxError" class="text-danger text-center fw-bold mb-3" style="display:none;"></div>
                     <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
 
                     <div class="mb-3">
@@ -52,4 +53,40 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script>
+        $(document).ready(function () {
+            $('#loginForm').on('submit', function (e) {
+                e.preventDefault();
+                var $form = $(this);
+                if (!$form.valid()) return;
+
+                var $submitBtn = $form.find('button[type="submit"]');
+                var originalText = $submitBtn.html();
+                $submitBtn.prop('disabled', true).html('<i class="spinner-border spinner-border-sm"></i> Đang đăng nhập...');
+                $('#ajaxError').hide();
+
+                $.ajax({
+                    type: "POST",
+                    url: $form.attr('action'),
+                    data: $form.serialize(),
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                    success: function (response) {
+                        if (response.success) {
+                            if (response.token) {
+                                localStorage.setItem('jwtToken', response.token);
+                            }
+                            window.location.href = response.redirectUrl;
+                        } else {
+                            $('#ajaxError').text(response.message).show();
+                            $submitBtn.prop('disabled', false).html(originalText);
+                        }
+                    },
+                    error: function () {
+                        $('#ajaxError').text("Lỗi kết nối đến máy chủ! Vui lòng thử lại sau.").show();
+                        $submitBtn.prop('disabled', false).html(originalText);
+                    }
+                });
+            });
+        });
+    </script>
 }
