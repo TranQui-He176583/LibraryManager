@@ -1,12 +1,7 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\Users\\quyka\\source\\repos\\LibraryManager\\Proejct\\",
-  "Documents": [
-    {
-      "AbsoluteMoniker": "D:0:0:{EE310A6D-2872-4BD9-9F8B-72F1B6CEB8E7}|LibraryWeb\\LibraryWeb.csproj|c:\\users\\quyka\\source\\repos\\librarymanager\\proejct\\libraryweb\\views\\books\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{EE310A6D-2872-4BD9-9F8B-72F1B6CEB8E7}|LibraryWeb\\LibraryWeb.csproj|solutionrelative:libraryweb\\views\\books\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    }
-  ],
+  "Documents": [],
   "DocumentGroupContainers": [
     {
       "Orientation": 1,
@@ -14,7 +9,7 @@
       "DocumentGroups": [
         {
           "DockedHeight": 376,
-          "SelectedChildIndex": 170,
+          "SelectedChildIndex": -1,
           "Children": [
             {
               "$type": "Bookmark",
@@ -686,28 +681,15 @@
             },
             {
               "$type": "Bookmark",
-              "Name": "ST:99:0:{e8034f19-ab72-4f06-83fd-f6832b41aa63}"
+              "Name": "ST:108:0:{e8034f19-ab72-4f06-83fd-f6832b41aa63}"
             },
             {
               "$type": "Bookmark",
-              "Name": "ST:101:0:{e8034f19-ab72-4f06-83fd-f6832b41aa63}"
+              "Name": "ST:109:0:{e8034f19-ab72-4f06-83fd-f6832b41aa63}"
             },
             {
               "$type": "Bookmark",
-              "Name": "ST:100:0:{e8034f19-ab72-4f06-83fd-f6832b41aa63}"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "Details.cshtml",
-              "DocumentMoniker": "C:\\Users\\quyka\\source\\repos\\LibraryManager\\Proejct\\LibraryWeb\\Views\\Books\\Details.cshtml",
-              "RelativeDocumentMoniker": "LibraryWeb\\Views\\Books\\Details.cshtml",
-              "ToolTip": "C:\\Users\\quyka\\source\\repos\\LibraryManager\\Proejct\\LibraryWeb\\Views\\Books\\Details.cshtml",
-              "RelativeToolTip": "LibraryWeb\\Views\\Books\\Details.cshtml",
-              "ViewState": "AgIAACMBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-03-29T08:27:17.852Z",
-              "EditorCaption": ""
+              "Name": "ST:110:0:{e8034f19-ab72-4f06-83fd-f6832b41aa63}"
             }
           ]
         },

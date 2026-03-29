@@ -6,6 +6,8 @@ using WPF_Staff_Admin.Services;
 using WPF_Staff_Admin.ViewModels.Borrowing;
 using WPF_Staff_Admin.Views;
 using WPF_Staff_Admin.Views.Borrowing;
+using WPF_Staff_Admin.ViewModels.Users;
+using WPF_Staff_Admin.Views.Users;
 
 namespace WPF_Staff_Admin.ViewModels
 {
@@ -55,6 +57,7 @@ namespace WPF_Staff_Admin.ViewModels
         public string UserRole => SessionManager.Instance.CurrentUser?.RoleName ?? "";
         public bool IsAdmin => SessionManager.Instance.IsAdmin;
         public bool IsStaff => SessionManager.Instance.IsStaff;
+        public bool IsAdminOrStaff => IsAdmin || IsStaff;
 
         #endregion
 
@@ -113,7 +116,19 @@ namespace WPF_Staff_Admin.ViewModels
         private void NavigateToUsers()
         {
             CurrentViewTitle = "Quản lý Người dùng";
-            CurrentView = CreatePlaceholderView("User Management - Đang phát triển");
+            
+            var userService = App.ServiceProvider.GetRequiredService<IUserService>();
+            var dialogService = App.ServiceProvider.GetRequiredService<IDialogService>();
+            var authService = App.ServiceProvider.GetRequiredService<IAuthService>();
+
+            var userListViewModel = new UserListViewModel(
+                userService,
+                dialogService,
+                authService
+            );
+
+            var userListView = new UserListView(userListViewModel);
+            CurrentView = userListView;
         }
 
         private void NavigateToBorrowings()
@@ -212,7 +227,7 @@ namespace WPF_Staff_Admin.ViewModels
 
         private bool CanAccessUsers()
         {
-            return SessionManager.Instance.IsAdmin;
+            return IsAdmin || IsStaff;
         }
 
         #endregion

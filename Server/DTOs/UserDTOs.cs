@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
 namespace Server.DTOs
 {
@@ -135,4 +135,18 @@ namespace Server.DTOs
         public T? Data { get; set; }
     }
 
+    public class UserUpdateDTO
+    {
+        [Required(ErrorMessage = "Họ tên là bắt buộc")]
+        public string FullName { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "Email là bắt buộc")]
+        [EmailAddress(ErrorMessage = "Email không hợp lệ")]
+        public string Email { get; set; } = string.Empty;
+
+        public string? PhoneNumber { get; set; }
+        public string? Address { get; set; }
+        public DateOnly? DateOfBirth { get; set; }
+        public string? NewPassword { get; set; }
+    }
 }

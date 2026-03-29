@@ -1,4 +1,4 @@
-﻿<Window x:Class="WPF_Staff_Admin.Views.MainWindow"
+<Window x:Class="WPF_Staff_Admin.Views.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -186,7 +186,7 @@
 
                     
                         <Border Height="1" Background="#37474F" Margin="10,10"
-                               Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                               Visibility="{Binding IsAdminOrStaff, Converter={StaticResource BoolToVisibilityConverter}}"/>
 
                       
                         <TextBlock Text="ADMIN"
@@ -194,19 +194,19 @@
                                   FontWeight="SemiBold"
                                   Foreground="#78909C"
                                   Margin="20,10,10,5"
-                                  Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                                  Visibility="{Binding IsAdminOrStaff, Converter={StaticResource BoolToVisibilityConverter}}"/>
 
                         <Button Command="{Binding NavigateToUsersCommand}"
                                Style="{StaticResource MenuButtonStyle}"
                                Tag="👥"
-                               Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVisibilityConverter}}">
+                               Visibility="{Binding IsAdminOrStaff, Converter={StaticResource BoolToVisibilityConverter}}">
                             <TextBlock Text="Quản lý Người dùng"/>
                         </Button>
 
                         <Button Command="{Binding NavigateToReportsCommand}"
                                Style="{StaticResource MenuButtonStyle}"
                                Tag="📊"
-                               Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVisibilityConverter}}">
+                               Visibility="{Binding IsAdminOrStaff, Converter={StaticResource BoolToVisibilityConverter}}">
                             <TextBlock Text="Báo cáo,Thống kê"/>
                         </Button>
                     </StackPanel>

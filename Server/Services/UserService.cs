@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
 using Server.DTOs;
@@ -318,16 +318,17 @@ namespace Server.Services
         }
 
 
-        public async Task<ActionResult<IEnumerable<UserDTO>>> GetAllUsers([FromQuery] string? role = null)
+        public async Task<ActionResult<IEnumerable<UserDTO>>> GetAllUsers(int currentUserId, string currentUserRole, [FromQuery] string? role = null)
         {
             var query = _context.Users.AsQueryable();
-            if (!string.IsNullOrEmpty(role))
+            // Phân quyền: Staff chỉ thấy Member. Admin thấy tất cả (hoặc lọc theo role)
+            if (currentUserRole == "Staff")
+            {
+                query = query.Where(u => u.Role.RoleName == "Member");
+            }
+            else if (!string.IsNullOrEmpty(role))
             {
                 query = query.Where(u => u.Role.RoleName == role);
-            }
-            else
-            {
-                query = query.Where(u => u.Role.RoleName == "Mêm"); 
             }
 
             var users = await query
@@ -343,7 +344,7 @@ namespace Server.Services
                     Address = u.Address,
                     Role = u.Role.RoleName,
                     IsActive = u.IsActive,
-                    MembershipExpiry = u.Member.MembershipDate,
+                    MembershipExpiry = u.Member.MembershipExpiry,
                     CreatedAt = u.CreatedAt,
                     UpdatedAt = u.UpdatedAt
                 })
@@ -507,5 +508,65 @@ namespace Server.Services
 
 
 
+        public async Task<ActionResult<ApiResponse>> UpdateUser(int userId, UserUpdateDTO dto, int currentUserId, string currentUserRole)
+        {
+            try
+            {
+                var user = await _context.Users.Include(u => u.Role).Include(u => u.Member).FirstOrDefaultAsync(u => u.UserId == userId);
+                if (user == null) return new ApiResponse { Success = false, Message = "Không tìm thấy người dùng" };
+
+                // Phân quyền: Staff chỉ được sửa Member
+                if (currentUserRole == "Staff" && user.Role.RoleName != "Member")
+                {
+                    return new ApiResponse { Success = false, Message = "Bạn không có quyền chỉnh sửa tài khoản này" };
+                }
+
+                user.FullName = dto.FullName;
+                user.Email = dto.Email;
+                user.PhoneNumber = dto.PhoneNumber;
+                user.Address = dto.Address;
+                user.DateOfBirth = dto.DateOfBirth;
+                user.UpdatedAt = DateTime.Now;
+
+                if (!string.IsNullOrEmpty(dto.NewPassword))
+                {
+                    user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.NewPassword);
+                }
+
+                await _context.SaveChangesAsync();
+                return new ApiResponse { Success = true, Message = "Cập nhật người dùng thành công" };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse { Success = false, Message = "Lỗi: " + ex.Message };
+            }
+        }
+
+        public async Task<ActionResult<ApiResponse>> ToggleUserStatus(int userId, int currentUserId, string currentUserRole)
+        {
+            try
+            {
+                var user = await _context.Users.Include(u => u.Role).FirstOrDefaultAsync(u => u.UserId == userId);
+                if (user == null) return new ApiResponse { Success = false, Message = "Không tìm thấy người dùng" };
+
+                if (userId == currentUserId) return new ApiResponse { Success = false, Message = "Bạn không thể tự khóa tài khoản của mình" };
+
+                // Phân quyền: Staff chỉ được khóa Member
+                if (currentUserRole == "Staff" && user.Role.RoleName != "Member")
+                {
+                    return new ApiResponse { Success = false, Message = "Bạn không có quyền thao tác trên tài khoản này" };
+                }
+
+                user.IsActive = !user.IsActive;
+                user.UpdatedAt = DateTime.Now;
+
+                await _context.SaveChangesAsync();
+                return new ApiResponse { Success = true, Message = (user.IsActive ? "Mở khóa" : "Khóa") + " tài khoản thành công" };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse { Success = false, Message = "Lỗi: " + ex.Message };
+            }
+        }
     }
 }

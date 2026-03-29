@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Server.DTOs;
 using Server.Models;
 using Server.Services;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 namespace Server.Controllers
 {
     [ApiController]
@@ -62,10 +64,31 @@ namespace Server.Controllers
         {
             return await _userService.ChangePassword(userId, dto);
         }
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<UserDTO>>> GetAllUsers([FromQuery] string? role = null)
         {
-            return await _userService.GetAllUsers(role);
+            var currentUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
+            var currentUserRole = User.FindFirst(ClaimTypes.Role)?.Value ?? "";
+            return await _userService.GetAllUsers(currentUserId, currentUserRole, role);
+        }
+        
+        [Authorize]
+        [HttpPut("manage/{id}")]
+        public async Task<ActionResult<ApiResponse>> UpdateUser(int id, [FromBody] UserUpdateDTO dto)
+        {
+            var currentUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
+            var currentUserRole = User.FindFirst(ClaimTypes.Role)?.Value ?? "";
+            return await _userService.UpdateUser(id, dto, currentUserId, currentUserRole);
+        }
+
+        [Authorize]
+        [HttpPost("{id}/toggle-status")]
+        public async Task<ActionResult<ApiResponse>> ToggleUserStatus(int id)
+        {
+            var currentUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
+            var currentUserRole = User.FindFirst(ClaimTypes.Role)?.Value ?? "";
+            return await _userService.ToggleUserStatus(id, currentUserId, currentUserRole);
         }
         [HttpGet("search")]
         public async Task<ActionResult<IEnumerable<UserDTO>>> SearchUsers([FromQuery] string term)

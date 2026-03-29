@@ -9,6 +9,7 @@ using WPF_Staff_Admin.Models;
 using WPF_Staff_Admin.Services;
 using WPF_Staff_Admin.ViewModels;
 using WPF_Staff_Admin.ViewModels.Borrowing;
+using WPF_Staff_Admin.ViewModels.Users;
 using WPF_Staff_Admin.Views;
 using System.Runtime.InteropServices;
 using System.Net.Http;
@@ -83,6 +84,11 @@ namespace WPF_Staff_Admin
             services.AddSingleton<IAuthorService, AuthorService>();       
             services.AddSingleton<ICategoryService, CategoryService>();
             services.AddSingleton<IPublisherService, PublisherService>();
+            services.AddSingleton<IUserService>(sp => 
+                new UserService(
+                    sp.GetRequiredService<IHttpClientFactory>().CreateClient("ApiClient"),
+                    sp.GetRequiredService<IConfiguration>()
+                ));
 
             services.AddTransient<LoginViewModel>();
             services.AddTransient<MainViewModel>();
@@ -91,6 +97,7 @@ namespace WPF_Staff_Admin
             services.AddTransient<WPF_Staff_Admin.ViewModels.Authors.AuthorListViewModel>();
             services.AddTransient<WPF_Staff_Admin.ViewModels.Categories.CategoryListViewModel>();
             services.AddTransient<WPF_Staff_Admin.ViewModels.Publishers.PublisherListViewModel>();
+            services.AddTransient<UserListViewModel>();
 
 
             services.AddTransient<LoginWindow>();
